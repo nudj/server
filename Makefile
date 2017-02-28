@@ -1,4 +1,3 @@
-VERSION:=1.1.0
 IMAGE:=nudj/service
 DEPLOY:=blue
 
@@ -7,10 +6,7 @@ CWD=$(shell pwd)
 .PHONY: build dev run deploy
 
 build:
-	docker build -t $(IMAGE):$(VERSION) .
-
-push:
-	docker push $(IMAGE):$(VERSION)
+	docker build -t $(IMAGE) .
 
 dev:
 	@docker-compose \
@@ -33,4 +29,4 @@ deploy:
 		-p 80:80 \
 		-p 443:443 \
 		-v $(CWD)/ssl:/etc/ssl \
-		$(IMAGE):$(VERSION)
+		$(IMAGE)

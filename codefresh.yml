@@ -1,0 +1,20 @@
+version: '1.0'
+
+steps:
+
+  build_image:
+    title: Building Image
+    type: build
+    image_name: nudj/service
+    tag: 0.1.0
+    working_directory: ${{main_clone}}
+    dockerfile: Dockerfile
+
+  push_to_registry:
+    title: Pushing to Docker Registry (with credentials)
+    type: push
+    candidate: '${{build_image}}'
+    tag: 0.1.0
+    credentials:
+      username: '${{dockerUsername}}'
+      password: '${{dockerPassword}}'
