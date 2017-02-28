@@ -1,7 +1,7 @@
 version: '2'
 services:
   service:
-    image: nudj/service:1.0.0
+    image: nudj/service:1.1.0
     volumes:
      - ./ssl:/etc/ssl
     depends_on:
