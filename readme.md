@@ -1,5 +1,7 @@
 # nudj http service
 
+[![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=nudj&repoName=service&branch=master&pipelineName=master&accountName=collingo&key=eyJhbGciOiJIUzI1NiJ9.NThhZDVhYzdhOGU4YWUwMTAwMzQ4MTcz.LswrznCGW0BHHD1jCDCg-EWQm_-4_j0qwWCvUTZcCYA&type=cf-1)]( https://g.codefresh.io/repositories/nudj/service/builds?filter=trigger:build;branch:master;service:58b58053d34d0c0100e573d1~master)
+
 HTTP layer covering of all the nudj microservices
 
 # Setup
