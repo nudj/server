@@ -8,8 +8,8 @@ services:
     depends_on:
      - web
     ports:
-     - "8080:8080"
-     - "8443:8443"
+     - "80:80"
+     - "443:443"
     command: /bin/sh -c "nginx -g 'daemon off;'"
   web:
     image: nudj/web:1.0.0
