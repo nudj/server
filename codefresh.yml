@@ -5,16 +5,26 @@ steps:
   build_image:
     title: Building Image
     type: build
-    image_name: nudj/service
+    image_name: nudj/server
     tag: 0.1.0
     working_directory: ${{main_clone}}
     dockerfile: Dockerfile
+    when:
+      branch:
+        only:
+          - master
 
   push_to_registry:
     title: Pushing to Docker Registry (with credentials)
     type: push
     candidate: '${{build_image}}'
     tag: 0.1.0
-    credentials:
-      username: '${{dockerUsername}}'
-      password: '${{dockerPassword}}'
+    provider: 'ecr'
+    registry: ${{AWS_REGISTRY}}
+    accessKeyId: ${{AWS_ACCESS_KEY}}
+    secretAccessKey: ${{AWS_SECRET_KEY}}
+    region: ${{AWS_REGION}}
+    when:
+      branch:
+        only:
+          - master
