@@ -1,13 +1,10 @@
 version: '2'
 services:
   service:
-    image: nudj/service:0.1.0
-    volumes:
-     - ./ssl:/etc/ssl
+    image: nudj/server:0.2.0
     depends_on:
      - web
     ports:
      - "80:80"
-     - "443:443"
   web:
     image: nudj/web:0.2.0

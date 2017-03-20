@@ -1,5 +1,4 @@
-IMAGE:=nudj/service
-DEPLOY:=blue
+IMAGE:=nudj/server
 
 CWD=$(shell pwd)
 
@@ -21,12 +20,3 @@ run:
 		-f $(CWD)/docker-compose.yml \
 		up \
 		--force-recreate
-
-deploy:
-	hyper run -d \
-		--name service-$(DEPLOY) \
-		--link web \
-		-p 80:80 \
-		-p 443:443 \
-		-v $(CWD)/ssl:/etc/ssl \
-		$(IMAGE)
