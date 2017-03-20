@@ -5,13 +5,8 @@ steps:
   build_image:
     title: Building Image
     type: build
-<<<<<<< Updated upstream
-    image_name: nudj/service
-    tag: 0.1.0
-=======
     image_name: nudj/server
     tag: 0.2.0
->>>>>>> Stashed changes
     working_directory: ${{main_clone}}
     dockerfile: Dockerfile
 
@@ -19,12 +14,6 @@ steps:
     title: Push to registry
     type: push
     candidate: '${{build_image}}'
-<<<<<<< Updated upstream
-    tag: 0.1.0
-    credentials:
-      username: '${{dockerUsername}}'
-      password: '${{dockerPassword}}'
-=======
     tag: 0.2.0
     provider: 'ecr'
     registry: ${{AWS_REGISTRY}}
@@ -35,4 +24,3 @@ steps:
       branch:
         only:
           - master
->>>>>>> Stashed changes
