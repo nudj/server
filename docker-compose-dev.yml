@@ -3,13 +3,30 @@ services:
   service:
     image: nginx:1.11.10-alpine
     volumes:
-     - ./service-dev.conf:/etc/nginx/conf.d/default.conf
-     - ./ssl:/etc/ssl
+      - ./service-dev.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-     - web
+      - web
     ports:
-     - "80:80"
-     - "443:443"
+      - "80:80"
     command: /bin/sh -c "nginx -g 'daemon off;'"
   web:
-    image: nudj/web:1.0.0
+    image: nudj/web:0.2.0
+    depends_on:
+      - api
+  api:
+    image: nudj/api:0.2.0
+    depends_on:
+      - db
+    ports:
+      - "81:3001"
+  db:
+    image: arangodb
+    environment:
+      - ARANGO_NO_AUTH=1
+    volumes:
+      - dbdata:/var/lib/arangodb
+    ports:
+      - "8529:8529"
+    command: arangod --server.authentication false
+volumes:
+  dbdata:
