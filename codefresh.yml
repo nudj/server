@@ -6,7 +6,7 @@ steps:
     title: Building Image
     type: build
     image_name: nudj/server
-    tag: 0.2.0
+    tag: 0.2.1
     working_directory: ${{main_clone}}
     dockerfile: Dockerfile
 
@@ -14,7 +14,7 @@ steps:
     title: Push to registry
     type: push
     candidate: '${{build_image}}'
-    tag: 0.2.0
+    tag: 0.2.1
     provider: 'ecr'
     registry: ${{AWS_REGISTRY}}
     accessKeyId: ${{AWS_ACCESS_KEY}}

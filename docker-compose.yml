@@ -1,10 +1,11 @@
 version: '2'
 services:
-  service:
-    image: nudj/server:0.2.0
+  server:
+    image: nudj/server:0.2.1
     depends_on:
      - web
     ports:
      - "80:80"
+     - "81:81"
   web:
     image: nudj/web:0.2.0

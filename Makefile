@@ -2,7 +2,7 @@ IMAGE:=nudj/server
 
 CWD=$(shell pwd)
 
-.PHONY: build dev run deploy
+.PHONY: build dev run
 
 build:
 	docker build -t $(IMAGE) .
