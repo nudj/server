@@ -14,7 +14,12 @@ services:
     image: nudj/web
     env_file: .env-web
     depends_on:
+      - redis
       - api
+  redis:
+    image: redis:alpine
+    volumes:
+      - ./sessionData:/data
   api:
     image: nudj/api
     env_file: .env-api

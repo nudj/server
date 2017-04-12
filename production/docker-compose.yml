@@ -1,32 +1,32 @@
 version: '2'
 services:
   server:
-    image: nudj/server:1.0.0-beta
+    image: nudj/server:1.0.0
     volumes:
       - ./ssl:/etc/ssl
     depends_on:
      - web
+     - db
     ports:
      - "80:80"
+     - "443:443"
   web:
-    image: nudj/web:1.0.0-beta
-    env_file: .env
+    image: nudj/web:1.0.0
+    env_file: .env-web
     depends_on:
+      - redis
       - api
+  redis:
+    image: redis:alpine
+    volumes:
+      - ./sessionData:/data
   api:
-    image: nudj/api:1.0.0-beta
+    image: nudj/api:1.0.0
+    env_file: .env-api
     depends_on:
       - db
-    ports:
-      - "81:81"
   db:
     image: arangodb
-    environment:
-      - ARANGO_NO_AUTH=1
+    env_file: .env-db
     volumes:
       - ./dbdata:/var/lib/arangodb3
-    ports:
-      - "8529:8529"
-    command: arangod --server.authentication false
-volumes:
-  dbdata:
