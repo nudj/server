@@ -5,18 +5,10 @@ CWD=$(shell pwd)
 .PHONY: build dev run
 
 build:
-	docker build -t $(IMAGE) .
+	cd dev && docker build -t $(IMAGE) .
 
-dev:
-	@docker-compose \
-		-p nudjdev \
-		-f $(CWD)/docker-compose-dev.yml \
-		up \
-		--force-recreate
+up:
+	@cd dev && docker-compose up -d && docker-compose logs -f
 
-run:
-	@docker-compose \
-		-p nudj \
-		-f $(CWD)/docker-compose.yml \
-		up \
-		--force-recreate
+down:
+	@cd dev && docker-compose down

@@ -1,3 +1,6 @@
 .DS_Store
-ssl/*
-!ssl/readme.md
+*/ssl/*
+!*/ssl/readme.md
+.env*
+dbdata
+*.zip

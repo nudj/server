@@ -1,0 +1,27 @@
+version: '2'
+services:
+  server:
+    image: nudj/server:staging
+    volumes:
+      - ./ssl:/etc/ssl
+    depends_on:
+     - web
+     - db
+    ports:
+     - "80:80"
+     - "443:443"
+  web:
+    image: nudj/web
+    env_file: .env-web
+    depends_on:
+      - api
+  api:
+    image: nudj/api
+    env_file: .env-api
+    depends_on:
+      - db
+  db:
+    image: arangodb
+    env_file: .env-db
+    volumes:
+      - ./dbdata:/var/lib/arangodb3
