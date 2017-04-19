@@ -1,7 +1,7 @@
 version: '2'
 services:
   server:
-    image: nudj/server:1.0.0-beta
+    image: nudj/server:1.0.0
     volumes:
       - ./ssl:/etc/ssl
     depends_on:
@@ -11,7 +11,7 @@ services:
      - "80:80"
      - "443:443"
   web:
-    image: nudj/web:1.0.0-beta
+    image: nudj/web:1.0.2
     env_file: .env-web
     depends_on:
       - redis
@@ -21,7 +21,7 @@ services:
     volumes:
       - ../sessionData:/data
   api:
-    image: nudj/api:1.0.0-beta
+    image: nudj/api:1.0.0
     env_file: .env-api
     depends_on:
       - db
