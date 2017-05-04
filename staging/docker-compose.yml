@@ -4,6 +4,7 @@ services:
     image: nudj/server:staging
     volumes:
       - ./ssl:/etc/ssl
+      - ./.htpasswd:/etc/nginx/.htpasswd
     depends_on:
      - web
      - db
