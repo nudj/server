@@ -5,18 +5,18 @@ CWD=$(shell pwd)
 .PHONY: build buildStaging pushStaging staging buildProd dev run
 
 build:
-	@cd local && docker build -t $(IMAGE) .
+	@docker build -t $(IMAGE) local
 
 buildStaging:
-	@cd ./staging && docker build -t $(IMAGE):staging .
+	@docker build -t $(IMAGE):staging staging
 
 pushStaging:
-	@cd ./staging && docker push $(IMAGE):staging
+	@docker push $(IMAGE):staging
 
 staging: buildStaging pushStaging
 
 buildProd:
-	cd production && docker build -t $(IMAGE):0.2.2 .
+	@docker build -t $(IMAGE):0.2.2 production
 
 up:
 	@cd local && docker-compose up -d && docker-compose logs -f
