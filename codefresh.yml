@@ -9,10 +9,10 @@ steps:
     tag: staging
     working_directory: ${{main_clone}}/staging
     dockerfile: Dockerfile
-    # when:
-    #   branch:
-    #     only:
-    #       - develop
+    when:
+      branch:
+        only:
+          - develop
 
   build_prod:
     title: Build Production Image
@@ -34,10 +34,10 @@ steps:
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'
-    # when:
-    #   branch:
-    #     only:
-    #       - develop
+    when:
+      branch:
+        only:
+          - develop
 
   push_prod:
     title: Push production
