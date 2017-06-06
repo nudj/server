@@ -43,7 +43,7 @@ steps:
     title: Push production
     type: push
     candidate: '${{build_prod}}'
-    tag: 0.2.2
+    tag: 1.1.0
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'

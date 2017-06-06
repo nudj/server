@@ -1,0 +1,36 @@
+#!/bin/sh
+
+environment=${1:-staging}
+version=${2:-$environment}
+image="nudj/server:$version"
+web="nudj/web:${3:-latest}"
+webBeta="nudj/web:${4:-latest}"
+hire="nudj/hire:${5:-latest}"
+hireBeta="nudj/api:${6:-latest}"
+api="nudj/api:${7:-latest}"
+server="nudj$environment"
+localPath="$environment"
+remotePath="/home/nudjtech/$environment"
+echo "Deploying $environment"
+
+# docker build -t $image $environment
+# docker push $image
+scp -r $environment/ssl $server:$remotePath/ssl
+scp $localPath/docker-compose.yml $server:$remotePath/docker-compose.yml
+scp $localPath/.env-api $server:$remotePath/.env-api
+scp $localPath/.env-db $server:$remotePath/.env-db
+scp $localPath/.env-web $server:$remotePath/.env-web
+scp $localPath/.env-hire $server:$remotePath/.env-hire
+scp $localPath/.htpasswd $server:$remotePath/.htpasswd
+ssh -t $server bash -c "'
+cd $environment
+sudo docker ps
+sudo docker pull $image
+sudo docker pull $web
+sudo docker pull $webBeta
+sudo docker pull $hire
+sudo docker pull $hireBeta
+sudo docker pull $api
+sudo docker-compose up -d
+sudo docker ps
+'"

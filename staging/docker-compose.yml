@@ -20,7 +20,7 @@ services:
       - api
   hire:
     image: nudj/hire:latest
-    env_file: .env-web
+    env_file: .env-hire
     depends_on:
       - redis
       - api
