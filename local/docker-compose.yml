@@ -1,30 +1,52 @@
 version: '2'
 services:
   server:
-    image: nudj/server
+    image: nudj/server:local
     volumes:
       - ./ssl:/etc/ssl
+      - ./.htpasswd:/etc/nginx/.htpasswd
     depends_on:
      - web
+     - betaWeb
+     - hire
+     - betaHire
      - db
     ports:
      - "80:80"
      - "443:443"
   web:
-    image: nudj/web
+    image: nudj/web:latest
     env_file: .env-web
     depends_on:
       - redis
       - api
+  betaWeb:
+    image: nudj/web:latest
+    env_file: .env-web
+    depends_on:
+      - redis
+      - api
+  hire:
+    image: nudj/hire:latest
+    env_file: .env-hire
+    depends_on:
+      - redis
+      - api
+  betaHire:
+    image: nudj/hire:latest
+    env_file: .env-hire
+    depends_on:
+      - redis
+      - api
+  api:
+    image: nudj/api:latest
+    env_file: .env-api
+    depends_on:
+      - db
   redis:
     image: redis:alpine
     volumes:
       - ./sessionData:/data
-  api:
-    image: nudj/api
-    env_file: .env-api
-    depends_on:
-      - db
   db:
     image: arangodb
     env_file: .env-db

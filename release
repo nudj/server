@@ -13,8 +13,8 @@ localPath="$environment"
 remotePath="/home/nudjtech/$environment"
 echo "Deploying $environment"
 
-# docker build -t $image $environment
-# docker push $image
+docker build -t $image $environment
+docker push $image
 scp -r $environment/ssl $server:$remotePath/ssl
 scp $localPath/docker-compose.yml $server:$remotePath/docker-compose.yml
 scp $localPath/.env-api $server:$remotePath/.env-api
@@ -31,6 +31,6 @@ sudo docker pull $webBeta
 sudo docker pull $hire
 sudo docker pull $hireBeta
 sudo docker pull $api
-sudo docker-compose up -d
+sudo docker-compose up -d --force-recreate
 sudo docker ps
 '"
