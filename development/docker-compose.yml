@@ -1,15 +1,54 @@
 version: '2'
 services:
   server:
-    image: nginx:1.11.10-alpine
+    image: nudj/server:development
     volumes:
-      - ./service.conf:/etc/nginx/conf.d/default.conf
+      - ./ssl:/etc/ssl
       - ./.htpasswd:/etc/nginx/.htpasswd
     depends_on:
       - web
+      - betaWeb
+      - hire
+      - betaHire
+      - db
     ports:
       - "80:80"
-    command: /bin/sh -c "nginx -g 'daemon off;'"
+      - "443:443"
   web:
-    image: nudj/web
-    env_file: .env
+    image: nudj/web:latest
+    env_file: .env-web
+    depends_on:
+      - redis
+      - api
+  betaWeb:
+    image: nudj/web:latest
+    env_file: .env-web
+    depends_on:
+      - redis
+      - api
+  hire:
+    image: nudj/hire:latest
+    env_file: .env-hire
+    depends_on:
+      - redis
+      - api
+  betaHire:
+    image: nudj/hire:latest
+    env_file: .env-hire
+    depends_on:
+      - redis
+      - api
+  api:
+    image: nudj/api:latest
+    env_file: .env-api
+    depends_on:
+      - db
+  redis:
+    image: redis:alpine
+    volumes:
+      - ../sessionData:/data
+  db:
+    image: arangodb
+    env_file: .env-db
+    volumes:
+      - ../dbdata:/var/lib/arangodb3

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-environment=${1:-staging}
+environment=${1:-development}
 version=${2:-$environment}
 image="nudj/server:$version"
 web="nudj/web:${3:-latest}"
@@ -13,8 +13,8 @@ localPath="$environment"
 remotePath="/home/nudjtech/$environment"
 echo "Deploying $environment"
 
-# docker build -t $image $environment
-# docker push $image
+docker build -t $image $environment
+docker push $image
 rsync -rzP --delete --delete-excluded --exclude=Dockerfile --exclude=service.conf --exclude=.DS_Store --exclude=.dockerignore $localPath/ $server:$remotePath
 ssh -t $server bash -c "'
 cd $environment

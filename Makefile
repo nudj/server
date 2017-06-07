@@ -13,5 +13,8 @@ up:
 down:
 	@cd local && docker-compose down
 
-staging:
+development:
 	./release
+
+staging:
+	./release staging
