@@ -27,13 +27,13 @@ services:
       - redis
       - api
   hire:
-    image: nudj/hire:0.1.0
+    image: nudj/hire:1.0.0
     env_file: .env-hire
     depends_on:
       - redis
       - api
   betaHire:
-    image: nudj/hire:0.1.0
+    image: nudj/hire:1.0.0
     env_file: .env-hire
     depends_on:
       - redis
