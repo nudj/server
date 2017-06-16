@@ -7,9 +7,7 @@ services:
       - ./.htpasswd:/etc/nginx/.htpasswd
     depends_on:
      - web
-     - betaWeb
      - hire
-     - betaHire
      - db
     ports:
      - "80:80"
@@ -20,19 +18,7 @@ services:
     depends_on:
       - redis
       - api
-  betaWeb:
-    image: nudj/web:latest
-    env_file: .env-web
-    depends_on:
-      - redis
-      - api
   hire:
-    image: nudj/hire:latest
-    env_file: .env-hire
-    depends_on:
-      - redis
-      - api
-  betaHire:
     image: nudj/hire:latest
     env_file: .env-hire
     depends_on:
