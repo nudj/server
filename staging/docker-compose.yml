@@ -24,17 +24,18 @@ services:
     depends_on:
       - redis
       - api
+  api:
+    image: nudj/api:latest
+    env_file: .env-api
+    depends_on:
+      - db
   redis:
     image: redis:alpine
     volumes:
       - ../sessionData:/data
-  api:
-    image: nudj/api
-    env_file: .env-api
-    depends_on:
-      - db
   db:
     image: arangodb
     env_file: .env-db
     volumes:
       - ../dbdata:/var/lib/arangodb3
+      - ../dbdump:/dbdump

@@ -2,6 +2,18 @@ version: '1.0'
 
 steps:
 
+  build_development:
+    title: Build Development Image
+    type: build
+    image_name: nudj/server
+    tag: development
+    working_directory: ${{main_clone}}/development
+    dockerfile: Dockerfile
+    when:
+      branch:
+        only:
+          - develop
+
   build_staging:
     title: Build Staging Image
     type: build
@@ -26,6 +38,19 @@ steps:
         only:
           - master
 
+  push_development:
+    title: Push development
+    type: push
+    candidate: '${{build_development}}'
+    tag: development
+    credentials:
+      username: '${{dockerUsername}}'
+      password: '${{dockerPassword}}'
+    when:
+      branch:
+        only:
+          - develop
+
   push_staging:
     title: Push staging
     type: push
@@ -43,7 +68,7 @@ steps:
     title: Push production
     type: push
     candidate: '${{build_prod}}'
-    tag: 1.1.0
+    tag: 1.2.0
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'
