@@ -4,10 +4,8 @@ environment=${1:-development}
 version=${2:-$environment}
 image="nudj/server:$version"
 web="nudj/web:${3:-latest}"
-webBeta="nudj/web:${4:-latest}"
-hire="nudj/hire:${5:-latest}"
-hireBeta="nudj/api:${6:-latest}"
-api="nudj/api:${7:-latest}"
+hire="nudj/hire:${4:-latest}"
+api="nudj/api:${5:-latest}"
 server="nudj$environment"
 localPath="$environment"
 remotePath="/home/nudjtech/$environment"
@@ -15,15 +13,13 @@ echo "Deploying $environment"
 
 # docker build -t $image $environment
 # docker push $image
-rsync -avz --delete --delete-excluded --exclude=Dockerfile --exclude=service.conf --exclude=.DS_Store --exclude=.dockerignore $localPath/ $server:$remotePath
+rsync -avz --delete --delete-excluded --exclude=Dockerfile --exclude=service.conf --exclude=.DS_Store --exclude=.dockerignore --exclude=dbdump $localPath/ $server:$remotePath
 ssh -t $server bash -c "'
 cd $environment
 sudo docker ps
 sudo docker pull $image
 sudo docker pull $web
-sudo docker pull $webBeta
 sudo docker pull $hire
-sudo docker pull $hireBeta
 sudo docker pull $api
 sudo docker-compose up -d --remove-orphans
 sudo docker ps

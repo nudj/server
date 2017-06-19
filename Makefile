@@ -13,11 +13,17 @@ up:
 down:
 	@cd local && docker-compose down
 
-dump:
+dumpDevelopment:
 	./dump
 
-development:
+dumpStaging:
+	./dump staging
+
+dumpProduction:
+	./dump production
+
+releaseDevelopment:
 	./release
 
-staging:
+releaseStaging:
 	./release staging

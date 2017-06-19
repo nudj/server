@@ -19,7 +19,7 @@ services:
       - redis
       - api
   hire:
-    image: nudj/hire:1.0.0
+    image: nudj/hire:1.1.0
     env_file: .env-hire
     depends_on:
       - redis
@@ -38,3 +38,4 @@ services:
     env_file: .env-db
     volumes:
       - ../dbdata:/var/lib/arangodb3
+      - ../dbdump:/dbdump
