@@ -13,7 +13,7 @@ services:
      - "80:80"
      - "443:443"
   web:
-    image: nudj/web:1.3.3
+    image: nudj/web:1.3.4
     env_file: .env-web
     depends_on:
       - redis
