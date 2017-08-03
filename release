@@ -6,6 +6,7 @@ image="nudj/server:$version"
 web="nudj/web:${3:-latest}"
 hire="nudj/hire:${4:-latest}"
 api="nudj/api:${5:-latest}"
+maintenance="nudj/maintenance:latest"
 server="nudj$environment"
 localPath="$environment"
 remotePath="/home/nudjtech/$environment"
@@ -21,6 +22,7 @@ sudo docker pull $image
 sudo docker pull $web
 sudo docker pull $hire
 sudo docker pull $api
+sudo docker pull $maintenance
 sudo docker-compose up -d --remove-orphans
 sudo docker ps
 '"
