@@ -8,6 +8,7 @@ services:
     depends_on:
      - web
      - hire
+     - admin
      - db
     ports:
      - "80:80"
@@ -21,6 +22,12 @@ services:
   hire:
     image: nudj/hire:latest
     env_file: .env-hire
+    depends_on:
+      - redis
+      - api
+  admin:
+    image: nudj/admin:latest
+    env_file: .env-admin
     depends_on:
       - redis
       - api
@@ -42,3 +49,5 @@ services:
     volumes:
       - ./dbdata:/var/lib/arangodb3
       - ./dbdump:/dbdump
+    ports:
+      - "8529:8529"
