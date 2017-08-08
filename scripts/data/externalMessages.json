@@ -1,0 +1,39 @@
+[{
+  "_key": "6339648",
+  "_id": "sentExternal/6339648",
+  "_rev": "_VGh2Pp6---",
+  "hirerId": "6175755",
+  "jobId": "5621278",
+  "personId": "6303145",
+  "composeMessage": "Hi {{recipient.firstname}},\n\nQuick question for you - I don’t suppose you know any {{job.title}}s? \n\nWe’re hiring and I would really appreciate any introductions.  If you can think of anyone please could you send them this:\n\n{{job.link}}\n\nMany thanks,\n{{sender.firstname}}",
+  "selectLength": "short",
+  "selectStyle": "professional",
+  "sendMessage": "email",
+  "created": "2017-06-08T18:25:05.428+00:00",
+  "modified": "2017-06-08T18:29:51.421+00:00"
+}, {
+  "_key": "6340386",
+  "_id": "sentExternal/6340386",
+  "_rev": "_VGh6Ghu---",
+  "hirerId": "6175755",
+  "jobId": "5621247",
+  "personId": "6185949",
+  "composeMessage": "Hi {{recipient.firstname}},\n\nI hope this finds you well?\n\nI’m in need of a little favour and wondered whether you might be able to help. We’re hiring at the moment and are looking for a new {{job.title}}. This is a really critical role for us, so it’s important we find the right person. \n\nI really value your opinion so was wondering whether you know anyone in your network who it would be worth speaking to? They don’t have to necessarily be actively looking for a job but would love to have a conversation with anyone who is even tentatively interested in finding out more. \n\nWe are using nudj to help it make it as easy for you as possible to refer. All you need to do is forward the job link below and we can track the referral. If they are successful we can reward you. \n\n{{job.link}}\n\nLet me know if you need any more info, absolutely no pressure but any help would be appreciated. \n\nKind Regards,\n{{sender.firstname}}",
+  "selectLength": "long",
+  "selectStyle": "professional",
+  "sendMessage": "email",
+  "created": "2017-06-08T18:33:28.940+00:00",
+  "modified": "2017-06-08T18:34:04.219+00:00"
+}, {
+  "_key": "6341751",
+  "_id": "sentExternal/6341751",
+  "_rev": "_VGiIM0W---",
+  "hirerId": "6175755",
+  "jobId": "5621278",
+  "personId": "6303151",
+  "selectLength": "short",
+  "selectStyle": "professional",
+  "composeMessage": "Hi {{recipient.firstname}},\n\nQuick question for you - I don’t suppose you know any {{job.title}}s? \n\nWe’re hiring and I would really appreciate any introductions.  If you can think of anyone please could you send them this:\n\n{{job.link}}\n\nMany thanks,\n{{sender.firstname}}",
+  "created": "2017-06-08T18:48:51.278+00:00",
+  "modified": "2017-06-08T18:49:28.164+00:00"
+}]
