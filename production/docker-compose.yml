@@ -1,13 +1,14 @@
 version: '2'
 services:
   server:
-    image: nudj/server:1.4.0
+    image: nudj/server:1.5.0
     volumes:
       - ./ssl:/etc/ssl
       - ./.htpasswd:/etc/nginx/.htpasswd
     depends_on:
       - web
       - hire
+      - admin
       - web-beta
       - hire-beta
       - db
@@ -17,7 +18,7 @@ services:
   web-beta:
     image: nudj/maintenance:latest
   web:
-    image: nudj/web:1.4.4
+    image: nudj/web:2.0.1
     env_file: .env-web
     depends_on:
       - redis
@@ -25,13 +26,19 @@ services:
   hire-beta:
     image: nudj/maintenance:latest
   hire:
-    image: nudj/hire:1.1.1
+    image: nudj/hire:1.3.1
     env_file: .env-hire
     depends_on:
       - redis
       - api
+  admin:
+    image: nudj/admin:1.0.0
+    env_file: .env-admin
+    depends_on:
+      - redis
+      - api
   api:
-    image: nudj/api:1.1.0
+    image: nudj/api:2.1.0
     env_file: .env-api
     depends_on:
       - db

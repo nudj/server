@@ -8,6 +8,7 @@ services:
     depends_on:
       - web
       - hire
+      - admin
       - web-beta
       - hire-beta
       - db
@@ -27,6 +28,12 @@ services:
   hire:
     image: nudj/hire:latest
     env_file: .env-hire
+    depends_on:
+      - redis
+      - api
+  admin:
+    image: nudj/admin:latest
+    env_file: .env-admin
     depends_on:
       - redis
       - api

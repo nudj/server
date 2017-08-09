@@ -9,6 +9,7 @@ services:
       - web
       - hire
       - db
+      - admin
     ports:
       - "80:80"
       - "443:443"
@@ -21,6 +22,12 @@ services:
   hire:
     image: nudj/hire:latest
     env_file: .env-hire
+    depends_on:
+      - redis
+      - api
+  admin:
+    image: nudj/admin:latest
+    env_file: .env-admin
     depends_on:
       - redis
       - api
