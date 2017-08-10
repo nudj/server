@@ -18,7 +18,7 @@ services:
   web-beta:
     image: nudj/maintenance:latest
   web:
-    image: nudj/web:2.0.1
+    image: nudj/web:2.0.2
     env_file: .env-web
     depends_on:
       - redis
