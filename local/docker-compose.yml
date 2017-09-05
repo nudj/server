@@ -14,19 +14,30 @@ services:
      - "80:80"
      - "443:443"
   web:
-    image: nudj/web:latest
+    image: nudj/web-dev
     env_file: .env-web
     depends_on:
       - redis
       - api
+    volumes:
+      - ../../web/.zshrc:/root/.zshrc
+      - ../../web/src/lib:/usr/src/lib
+      - ../../web/src/mocks:/usr/src/mocks
+      - ../../web/src/test:/usr/src/test
+      - ../../web/src/.npmrc:/usr/src/.npmrc
+      - ../../web/src/nodemon.json:/usr/src/nodemon.json
+      - ../../web/src/package.json:/usr/src/package.json
+      - ../../web/src/webpack.client.js:/usr/src/webpack.client.js
+      - ../../web/src/webpack.server.js:/usr/src/webpack.server.js
+    command: ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.client.js --bail --hide-modules && ./node_modules/.bin/webpack --config ./webpack.server.js --bail --hide-modules && node ."
   hire:
-    image: nudj/hire:latest
+    image: nudj/hire:local
     env_file: .env-hire
     depends_on:
       - redis
       - api
   admin:
-    image: nudj/admin:latest
+    image: nudj/admin:local
     env_file: .env-admin
     depends_on:
       - redis
