@@ -8,7 +8,7 @@ build:
 	@docker build -t $(IMAGE):local local
 
 up:
-	@cd local && docker-compose up -d && docker-compose logs -f
+	@cd local && docker-compose up -d --force-recreate && docker-compose logs -f
 
 down:
 	@cd local && docker-compose down

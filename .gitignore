@@ -7,3 +7,4 @@ dbdata
 sessionData
 .htpasswd
 dbdump
+dbdata_backup

@@ -19,12 +19,20 @@ rsync -avz --delete --delete-excluded --exclude=Dockerfile --exclude=service.con
 ssh -t $server bash -c "'
 cd $environment
 sudo docker ps
+echo ''
 sudo docker pull $image
+echo ''
 sudo docker pull $web
+echo ''
 sudo docker pull $hire
+echo ''
 sudo docker pull $admin
+echo ''
 sudo docker pull $api
+echo ''
 sudo docker pull $maintenance
+echo ''
 sudo docker-compose up -d --remove-orphans
+echo ''
 sudo docker ps
 '"
