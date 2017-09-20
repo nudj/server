@@ -5,7 +5,7 @@ CWD=$(shell pwd)
 .PHONY: build up down
 
 build:
-	@docker build -t $(IMAGE):local local
+	@docker build -t $(IMAGE):local .
 
 up:
 	@docker-compose up -d --force-recreate && \
