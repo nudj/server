@@ -5,9 +5,13 @@ services:
     volumes:
       - ./ssl:/etc/ssl
       - ./.htpasswd:/etc/nginx/.htpasswd
+    depends_on:
+      - web
+      - hire
+      - admin
     ports:
-     - "80:80"
-     - "443:443"
+      - "80:80"
+      - "443:443"
   web:
     image: nudj/web:local
     env_file: .env-web

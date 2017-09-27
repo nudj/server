@@ -5,6 +5,12 @@ services:
     volumes:
       - ./ssl:/etc/ssl
       - ./.htpasswd:/etc/nginx/.htpasswd
+    depends_on:
+      - web
+      - web-beta
+      - hire
+      - hire-beta
+      - admin
     ports:
       - "80:80"
       - "443:443"

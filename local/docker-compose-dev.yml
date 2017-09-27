@@ -6,13 +6,13 @@ services:
       - ./ssl:/etc/ssl
       - ./.htpasswd:/etc/nginx/.htpasswd
     depends_on:
-     - web
-     - hire
-     - admin
-     - db
+      - web
+      - hire
+      - admin
+      - db
     ports:
-     - "80:80"
-     - "443:443"
+      - "80:80"
+      - "443:443"
   web:
     image: nudj/web-dev
     env_file: .env-web
