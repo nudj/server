@@ -5,11 +5,6 @@ services:
     volumes:
       - ./ssl:/etc/ssl
       - ./.htpasswd:/etc/nginx/.htpasswd
-    depends_on:
-     - web
-     - hire
-     - admin
-     - db
     ports:
      - "80:80"
      - "443:443"

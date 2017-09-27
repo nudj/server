@@ -45,7 +45,7 @@ services:
       - ../../hire/src/package.json:/usr/src/package.json
       - ../../hire/src/webpack.config.js:/usr/src/webpack.config.js
       - ../../hire/src/webpack.dll.js:/usr/src/webpack.dll.js
-    command: /bin/zsh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && torus run -o nudj -p hire -e local -- node ."'
+    command: /bin/zsh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
   admin:
     image: nudj/admin-dev
     env_file: .env-admin
@@ -61,7 +61,7 @@ services:
       - ../../admin/src/package.json:/usr/src/package.json
       - ../../admin/src/webpack.config.js:/usr/src/webpack.config.js
       - ../../admin/src/webpack.dll.js:/usr/src/webpack.dll.js
-    command: /bin/zsh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && torus run -o nudj -p admin -e local -- node ."'
+    command: /bin/zsh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
   api:
     image: nudj/api-dev
     env_file: .env-api
