@@ -3,7 +3,7 @@
 environment=${1:-development}
 server="nudj$environment"
 dumpDir="dbdump"
-localPath="/keybase/team/nudj/backups/$environment/$(date '+%F')"
+localPath="/keybase/private/nickcollings/backups/$environment/$(date '+%F')"
 remotePath="/home/nudjtech/$dumpDir"
 echo "Dumping $environment"
 command='docker-compose exec db /bin/sh -c \"arangodump --overwrite true --output-directory "/dbdump" --server.database "nudj" --server.username "\$DB_USER" --server.password "\$DB_PASS"\"'
@@ -15,5 +15,5 @@ echo '======'
 sudo env \$(cat .env-api | xargs) bash -c \"$command\"
 echo '======'
 '"
-mkdir $localPath
+mkdir -p $localPath
 rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $server:$remotePath/ $localPath
