@@ -2,7 +2,7 @@ IMAGE:=nudj/server
 
 CWD=$(shell pwd)
 
-.PHONY: build up down dumpDevelopment dumpStaging dumpProduction releaseDevelopment releaseStaging
+.PHONY: build up down backupDevelopment backupStaging backupProduction releaseDevelopment releaseStaging
 
 build:
 	@docker build -t $(IMAGE):local local
@@ -16,17 +16,17 @@ down:
 	@cd local && \
 		docker-compose -f $(CWD)/local/docker-compose-dev.yml down
 
-dumpDevelopment:
-	./dump
+backupDevelopment:
+	./scripts/backup
 
-dumpStaging:
-	./dump staging
+backupStaging:
+	./scripts/backup staging
 
-dumpProduction:
-	./dump production
+backupProduction:
+	./scripts/backup production
 
 releaseDevelopment:
-	./release
+	./scripts/release
 
 releaseStaging:
-	./release staging
+	./scripts/release staging

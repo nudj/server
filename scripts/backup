@@ -17,3 +17,4 @@ echo '======'
 '"
 mkdir -p $localPath
 rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $server:$remotePath/ $localPath
+echo "\nBackup for $environment completed to $localPath"
