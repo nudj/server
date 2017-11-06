@@ -3,7 +3,8 @@
 environment=${1:-development}
 server="nudj$environment"
 dumpDir="dbdump"
-localPath="/keybase/private/nickcollings/backups/$environment/$(date '+%F')"
+# localPath="/keybase/private/nickcollings/backups/$environment/$(date '+%F')"
+localPath="/Users/nick/dev/nudj/backups/$environment/$(date '+%F')"
 remotePath="/home/nudjtech/$dumpDir"
 echo "Dumping $environment"
 command='docker-compose exec db /bin/sh -c \"arangodump --overwrite true --output-directory "/dbdump" --server.database "nudj" --server.username "\$DB_USER" --server.password "\$DB_PASS"\"'
