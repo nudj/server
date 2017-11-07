@@ -25,7 +25,7 @@ services:
   hire-beta:
     image: nudj/maintenance:latest
   hire:
-    image: nudj/hire:4.0.0
+    image: nudj/hire:4.0.1
     env_file: .env-hire
     depends_on:
       - redis
