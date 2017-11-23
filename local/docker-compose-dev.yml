@@ -31,21 +31,27 @@ services:
     command: /bin/zsh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
   hire:
     image: nudj/hire-dev
+    environment:
+      - NPM_TOKEN
     env_file: .env-hire
     depends_on:
       - redis
       - api
     volumes:
       - ../../hire/.zshrc:/root/.zshrc
-      - ../../hire/src/lib:/usr/src/lib
-      - ../../hire/src/mocks:/usr/src/mocks
+      - ../../hire/src/app:/usr/src/app
       - ../../hire/src/test:/usr/src/test
+      - ../../hire/src/.flowconfig:/usr/src/.flowconfig
       - ../../hire/src/.npmrc:/usr/src/.npmrc
       - ../../hire/src/nodemon.json:/usr/src/nodemon.json
       - ../../hire/src/package.json:/usr/src/package.json
       - ../../hire/src/webpack.config.js:/usr/src/webpack.config.js
       - ../../hire/src/webpack.dll.js:/usr/src/webpack.dll.js
-    command: /bin/zsh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
+      - ../../framework/src:/usr/src/@nudj/framework
+      - ../../api/src:/usr/src/@nudj/api
+      - ../../library/src:/usr/src/@nudj/library
+      - ../../components/src:/usr/src/@nudj/components
+    command: /bin/zsh -c 'npm i ./@nudj/framework ./@nudj/api ./@nudj/library ./@nudj/components && ./node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
   admin:
     image: nudj/admin-dev
     env_file: .env-admin
