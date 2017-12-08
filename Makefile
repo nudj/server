@@ -29,4 +29,4 @@ releaseDevelopment:
 	./scripts/release
 
 releaseStaging:
-	./scripts/release staging
+	./scripts/release staging 2.1.0 6.1.0 LEGACY-V1 LEGACY-V1 LEGACY-V1

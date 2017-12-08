@@ -19,13 +19,13 @@ services:
       - redis
       - api
   hire:
-    image: nudj/hire:LEGACY-V1
+    image: nudj/hire:latest
     env_file: .env-hire
     depends_on:
       - redis
       - api
   admin:
-    image: nudj/admin:LEGACY-V1
+    image: nudj/admin:latest
     env_file: .env-admin
     depends_on:
       - redis
