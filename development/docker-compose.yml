@@ -25,7 +25,7 @@ services:
       - redis
       - api
   admin:
-    image: nudj/admin:latest
+    image: nudj/admin:LEGACY-V1
     env_file: .env-admin
     depends_on:
       - redis
