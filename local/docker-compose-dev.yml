@@ -81,6 +81,7 @@ services:
     volumes:
       - ../../api/.zshrc:/root/.zshrc
       - ../../api/src/gql:/usr/src/gql
+      - ../../api/src/gql-old:/usr/src/gql-old
       - ../../api/src/lib:/usr/src/lib
       - ../../api/src/mock:/usr/src/mock
       - ../../api/src/rest:/usr/src/rest
@@ -89,8 +90,8 @@ services:
       - ../../api/src/.npmrc:/usr/src/.npmrc
       - ../../api/src/nodemon.json:/usr/src/nodemon.json
       - ../../api/src/package.json:/usr/src/package.json
-      - ../../api/src/readme.md:/usr/src/readme.md
-    command: /bin/sh -c './node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "node ."'
+      - ../../api/src/index.js:/usr/src/index.js
+    command: /bin/zsh -c './node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "node ."'
   redis:
     image: redis:alpine
     volumes:
