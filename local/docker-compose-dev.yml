@@ -47,11 +47,13 @@ services:
       - ../../hire/src/package.json:/usr/src/package.json
       - ../../hire/src/webpack.config.js:/usr/src/webpack.config.js
       - ../../hire/src/webpack.dll.js:/usr/src/webpack.dll.js
+      - ../../hire/src/yarn.lock:/usr/src/yarn.lock
+      - ../../hire/src/flow-typed:/usr/src/flow-typed
       - ../../framework/src:/usr/src/@nudj/framework
       - ../../api/src:/usr/src/@nudj/api
       - ../../library/src:/usr/src/@nudj/library
       - ../../components/src:/usr/src/@nudj/components
-    command: /bin/zsh -c 'npm i ./@nudj/framework ./@nudj/api ./@nudj/library ./@nudj/components && ./node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
+    command: /bin/zsh -c './node_modules/.bin/webpack --config ./webpack.dll.js --bail --hide-modules && ./node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "printf \"\n\nBuilding...\n\" && ./node_modules/.bin/webpack --config ./webpack.config.js --bail --hide-modules && node ."'
   admin:
     image: nudj/admin-dev
     env_file: .env-admin
@@ -79,6 +81,7 @@ services:
     volumes:
       - ../../api/.zshrc:/root/.zshrc
       - ../../api/src/gql:/usr/src/gql
+      - ../../api/src/gql-old:/usr/src/gql-old
       - ../../api/src/lib:/usr/src/lib
       - ../../api/src/mock:/usr/src/mock
       - ../../api/src/rest:/usr/src/rest
@@ -87,8 +90,8 @@ services:
       - ../../api/src/.npmrc:/usr/src/.npmrc
       - ../../api/src/nodemon.json:/usr/src/nodemon.json
       - ../../api/src/package.json:/usr/src/package.json
-      - ../../api/src/readme.md:/usr/src/readme.md
-    command: /bin/sh -c './node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "node ."'
+      - ../../api/src/index.js:/usr/src/index.js
+    command: /bin/zsh -c './node_modules/.bin/nodemon --config ./nodemon.json -e js,html,css --quiet --watch ./ --delay 250ms -x "node ."'
   redis:
     image: redis:alpine
     volumes:
