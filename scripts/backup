@@ -7,13 +7,13 @@ dumpDir="dbdump"
 localPath="/Users/nick/dev/nudj/backups/$environment/$(date '+%F')"
 remotePath="/home/nudjtech/$dumpDir"
 echo "Dumping $environment"
-command='docker-compose exec db /bin/sh -c \"arangodump --overwrite true --output-directory "/dbdump" --server.database "nudj" --server.username "\$DB_USER" --server.password "\$DB_PASS"\"'
+command="docker-compose exec db /bin/sh -c \"arangodump --overwrite true --output-directory \"/dbdump\" --server.database \"nudj\" --server.username \"$DB_USER\" --server.password \"$DB_PASS\"\""
 
 ssh -t $server bash -c "'
 cd $environment
 ls -la
 echo '======'
-sudo env \$(cat .env-api | xargs) bash -c \"$command\"
+sudo $command
 echo '======'
 '"
 mkdir -p $localPath

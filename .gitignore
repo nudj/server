@@ -8,3 +8,4 @@ sessionData
 .htpasswd
 dbdump
 dbdata_backup
+node_modules

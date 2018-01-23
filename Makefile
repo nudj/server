@@ -17,13 +17,13 @@ down:
 		docker-compose -f $(CWD)/local/docker-compose-dev.yml down
 
 backupDevelopment:
-	./scripts/backup
+	@env -i $$(node ./scripts/extract-envkeys.js development DB_USER DB_PASS) ./scripts/backup development
 
 backupStaging:
-	./scripts/backup staging
+	@env -i $$(node ./scripts/extract-envkeys.js staging DB_USER DB_PASS) ./scripts/backup staging
 
 backupProduction:
-	./scripts/backup production
+	@env -i $$(node ./scripts/extract-envkeys.js production DB_USER DB_PASS) ./scripts/backup production
 
 releaseDevelopment:
 	./scripts/release
