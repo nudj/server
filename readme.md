@@ -89,6 +89,17 @@ Emulates the live environment without rebuilding on file change.
 1. `./scripts/release production [server-version] [web-version] [hire-version] [admin-version] [api-version]` e.g. `./scripts/release production 2.1.0 6.1.0 5.2.1 6.0.1 3.4.0`
 1. Enter `nudjtech` password for production (can be found in 1Password) when requested
 
+## Debugging environments
+
+1. If you have ssh access, you can run `ssh nudj[enviroment]` to access the evironment logs.
+1. Once inside the container, run `cd [enviroment]`. e.g. `cd development`
+1. To get an overview of the docker images' processes, run `sudo docker-compose ps`
+1. Enter `nudjtech` password for the given environment (can be found in 1Password) when prompted
+1. If any of the images have gone down or failed, try attempting a re-release.
+1. To debug a specific issue with an image, run `sudo docker-compose logs [repo]`
+  - e.g. If you got an error on hitting the homepage for `dev.hire.nudj.co`, you might run `sudo docker-compose logs hire` to diagnose the issue.
+1. To diagnose or debug issues further, see: **Full production emulation**
+
 # Useful notes
 
 ## Logging into local db to run commands using the Arango CLI
