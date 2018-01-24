@@ -33,7 +33,7 @@ The files/dirs in **bold** are gitignored and so should be copied from a colleag
 
 Allows for end to end testing of all the apps together. Emulates the live environment with rebuilding on file change.
 
-1. Ensure `/etc/hosts` has the following entries
+1. Ensure `/etc/hosts` on your host machine has the following entries
   ```
   127.0.0.1 local.nudj.co
   127.0.0.1 local.hire.nudj.co
@@ -42,9 +42,20 @@ Allows for end to end testing of all the apps together. Emulates the live enviro
   127.0.0.1 local.gql.nudj.co
   127.0.0.1 local.db.nudj.co
   ```
-1. Ensure you have run `make build` inside `web`, `hire`, `admin` and `api`
+1. Ensure you have run `make build` inside `server`, `web`, `hire`, `admin` and `api`
+1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the `./local` dir (ask for them from a colleague)
 1. From the project root run `make up` to start the platform in develop mode
+1. On first run...
+  1. Copy the generated Arango root password from the logs in the console
+  1. Go to `https://local.db.nudj.co/`
+  1. Log in with u: root and the copied password
+  1. Create a new database with name `nudj`
+  1. Create a new user with name `nudjtech`
+  1. Edit the new users permissions by checking read/write against the `nudj` database
+  1. Create all the required collections (see the dev/staging db for reference or ask a colleague)
 1. Wait until everything has built then access the sites on the `local.` domains
+1. On first run...
+  1. You will need to add data to the db in order for the apps to work. Ask a colleague to show you what minimum data this is in order to get various pages working :)
 1. Saving files in any of the applications will trigger a rebuild of that app
 1. `ctrl-c` to quit the logs and return to command line (platform remains running headlessly in the background)
 1. `make up` at any time to force recreate the platform (useful for environment changes)
@@ -55,7 +66,8 @@ Allows for end to end testing of all the apps together. Emulates the live enviro
 Emulates the live environment without rebuilding on file change.
 
 1. Ensure `/etc/hosts` is configured as above
-1. Ensure you have run `make buildLocal` inside `web`, `hire`, `admin` and `api`
+1. Ensure you have run `make buildLocal` inside `server`, `web`, `hire`, `admin` and `api`
+1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the `./local` dir (ask for them from a colleague)
 1. `cd local`
 1. Access the sites on the `local.` domains
 1. `make up` to run the platform
@@ -76,7 +88,7 @@ Emulates the live environment without rebuilding on file change.
 ## development or staging
 
 1. Ensure you have ssh access to the relevant server (try running `ssh nudj[environment]` in the terminal)
-1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the environment dir you wish to release
+1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the environment dir you wish to release (ask for them from a colleague)
 1. Ensure the builds on the develop branch for all applications have completed without error on CodeFresh
 1. `make release[environment]` e.g. `make releaseDevelopment`
 1. Enter `nudjtech` password for environment (can be found in 1Password) when requested
@@ -85,7 +97,7 @@ Emulates the live environment without rebuilding on file change.
 
 1. Ensure you have ssh access to the production server (try running `ssh nudjproduction` in the terminal)
 1. Release all applications with their own semversion and ensure the builds have completed and released the appropriately tagged Docker images
-1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the production dir
+1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the production dir (ask for them from a colleague)
 1. `./scripts/release production [server-version] [web-version] [hire-version] [admin-version] [api-version]` e.g. `./scripts/release production 2.1.0 6.1.0 5.2.1 6.0.1 3.4.0`
 1. Enter `nudjtech` password for production (can be found in 1Password) when requested
 
