@@ -77,11 +77,25 @@ Emulates the live environment without rebuilding on file change.
 
 # Backups
 
-1. Ensure you have ssh access to the relevant server (try running `ssh nudj[environment]` in the terminal)
+1. Ensure you have ssh access to the relevant server (try running `ssh nudj[environment]` in the terminal). Ignore this step for local env
 1. `yarn`
 1. Ensure you have a `.env-api` file inside each environment dir you want to back up
 1. `make backup[environment]` e.g. `make backupDevelopment`
-1. Enter `nudjtech` password for environment (can be found in 1Password) when requested
+1. Enter `nudjtech` password for environment (can be found in 1Password) if requested
+1. Backup will be found in the directory reported in the logs
+
+# Restoring
+
+**DANGEROUS!!! Restoring completely replaces a DB with new data. Please use with caution!**
+
+**If in any doubt, do not use!!!**
+
+1. Ensure you have ssh access to the relevant server (try running `ssh nudj[environment]` in the terminal). Ignore this step for local env
+1. `yarn`
+1. Ensure you have a `.env-api` file inside each environment dir you want to restore
+1. `make restore[environment] INPUT_DIR=[inputDir]` e.g. `make restoreLocal INPUT_DIR=/Users/nick/dev/nudj/local/dbdump`
+  1. `INPUT_DIR` must be an absolute path to a db backup directory produced by the backup command above
+1. Enter `nudjtech` password for environment (can be found in 1Password) if requested
 
 # Releases
 

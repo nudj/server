@@ -16,6 +16,12 @@ down:
 	@cd local && \
 		docker-compose -f $(CWD)/local/docker-compose-dev.yml down
 
+backupLocal:
+	@env -i $$(node ./scripts/extract-envkeys.js local DB_USER DB_PASS) ./scripts/backuplocal local
+
+restoreLocal:
+	@env -i $$(node ./scripts/extract-envkeys.js local DB_USER DB_PASS) ./scripts/restorelocal $(INPUT_DIR)
+
 backupDevelopment:
 	@env -i $$(node ./scripts/extract-envkeys.js development DB_USER DB_PASS) ./scripts/backup development
 
