@@ -1,8 +1,36 @@
 #!/bin/sh
 
-environment=${1:-development}
-version=${2:-$environment}
-image="nudj/server:$version"
+environment=$1
+if [ -z "$1" ]
+then
+  echo "Must supply an environment - e.g. ENV=development"
+  exit 1
+fi
+
+if [[ "$environment" = "production" ]]; then
+  if [ -z "$2" ]; then
+    echo "Must supply a server version - e.g. SERVER=1.0.0"
+    exit 1
+  fi
+  if [ -z "$3" ]; then
+    echo "Must supply a web version - e.g. WEB=1.0.0"
+    exit 1
+  fi
+  if [ -z "$4" ]; then
+    echo "Must supply a hire version - e.g. HIRE=1.0.0"
+    exit 1
+  fi
+  if [ -z "$5" ]; then
+    echo "Must supply a admin version - e.g. ADMIN=1.0.0"
+    exit 1
+  fi
+  if [ -z "$6" ]; then
+    echo "Must supply a api version - e.g. API=1.0.0"
+    exit 1
+  fi
+fi
+
+image="nudj/server:${2}"
 web="nudj/web:${3:-latest}"
 hire="nudj/hire:${4:-latest}"
 admin="nudj/admin:${5:-latest}"
@@ -11,10 +39,9 @@ maintenance="nudj/maintenance:latest"
 server="nudj$environment"
 localPath="$environment"
 remotePath="/home/nudjtech/$environment"
+
 echo "Deploying $environment"
 
-# docker build -t $image $environment
-# docker push $image
 rsync -avz --delete --delete-excluded --exclude=Dockerfile --exclude=service.conf --exclude=.DS_Store --exclude=.dockerignore --exclude=dbdump $localPath/ $server:$remotePath
 ssh -t $server bash -c "'
 cd $environment
@@ -32,7 +59,7 @@ sudo docker pull $api
 echo ''
 sudo docker pull $maintenance
 echo ''
-sudo docker-compose up -d --remove-orphans
+sudo docker-compose up -d --remove-orphans --force-recreate
 echo ''
 sudo docker ps
 '"
