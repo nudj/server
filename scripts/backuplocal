@@ -6,7 +6,6 @@ dumpDir="dbdump"
 localPath="/Users/nick/dev/nudj/server/local/$dumpDir"
 echo "Dumping $environment"
 cd $environment
-echo $DB_PASS
 bash -c "docker-compose exec db /bin/sh -c \"arangodump --overwrite true --output-directory \"/dbdump\" --server.database \"nudj\" --server.username \"$DB_USER\" --server.password \"$DB_PASS\"\""
 
 echo "\nBackup for $environment completed to $localPath"
