@@ -77,34 +77,58 @@ Emulates the live environment without rebuilding on file change.
 
 # Backups
 
-1. Ensure you have ssh access to the relevant server (try running `ssh nudj[environment]` in the terminal)
+1. Ensure you have ssh access to the relevant server (try running `ssh nudj[environment]` in the terminal). Ignore this step for local env
 1. `yarn`
 1. Ensure you have a `.env-api` file inside each environment dir you want to back up
-1. `make backup[environment]` e.g. `make backupDevelopment`
-1. Enter `nudjtech` password for environment (can be found in 1Password) when requested
+1. `make backup ENV=[environment]` e.g. `make backup ENV=development`
+1. Enter `nudjtech` password for environment (can be found in 1Password) if requested
+1. Backup will be found in the directory reported in the logs
+
+# Restores
+
+**DANGEROUS!!! Restoring completely replaces a DB with new data. Please use with caution!**
+
+**Always backup first - see above**
+
+**If in any doubt, do not use!!!**
+
+1. Ensure you have ssh access to the relevant server (try running `ssh nudj[environment]` in the terminal). Ignore this step for local env
+1. `yarn`
+1. Ensure you have a `.env-api` file inside each environment dir you want to restore
+1. `make restore ENV=[environment] INPUT_DIR=[inputDir]` e.g. `make restore ENV=local INPUT_DIR=/Users/nick/dev/nudj/local/dbdump`
+  1. `INPUT_DIR` must be an absolute path to a db backup directory produced by the backup command above
+1. Enter `nudjtech` password for environment (can be found in 1Password) if requested
 
 # Releases
 
 ## development or staging
 
+Releases the most recent build image tagged with `latest` for each app to the specified environment. Check CI on the `develop` branches to track the image building progress and double check what you are deploying.
+
 1. Ensure you have ssh access to the relevant server (try running `ssh nudj[environment]` in the terminal)
 1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the environment dir you wish to release (ask for them from a colleague)
 1. Ensure the builds on the develop branch for all applications have completed without error on CodeFresh
-1. `make release[environment]` e.g. `make releaseDevelopment`
+1. `make release ENV=[environment]` e.g. `make release ENV=Development`
 1. Enter `nudjtech` password for environment (can be found in 1Password) when requested
 
 ## production
 
+**DANGEROUS!!! Updates the production environment code. Please use with caution!**
+
+**Always backup first - see above**
+
+**If in any doubt, do not use!!!**
+
 1. Ensure you have ssh access to the production server (try running `ssh nudjproduction` in the terminal)
-1. Release all applications with their own semversion and ensure the builds have completed and released the appropriately tagged Docker images
+1. Release all applications with their own semver versions and ensure the builds have completed and released the appropriately tagged Docker images
 1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the production dir (ask for them from a colleague)
-1. `./scripts/release production [server-version] [web-version] [hire-version] [admin-version] [api-version]` e.g. `./scripts/release production 2.1.0 6.1.0 5.2.1 6.0.1 3.4.0`
+1. `make release ENV=production SERVER=[server-version] WEB=[web-version] HIRE=[hire-version] ADMIN=[admin-version] API=[api-version]` e.g. `make release ENV=production SERVER=1.0.0 WEB=2.0.0 HIRE=3.0.0 ADMIN=4.0.0 API=5.0.0`
 1. Enter `nudjtech` password for production (can be found in 1Password) when requested
 
-## Debugging environments
+# Debugging environments
 
-1. If you have ssh access, you can run `ssh nudj[enviroment]` to access the evironment logs.
-1. Once inside the container, run `cd [enviroment]`. e.g. `cd development`
+1. If you have ssh access, you can run `ssh nudj[environment]` to access the environment logs.
+1. Once inside the container, run `cd [environment]`. e.g. `cd development`
 1. To get an overview of the docker images' processes, run `sudo docker-compose ps`
 1. Enter `nudjtech` password for the given environment (can be found in 1Password) when prompted
 1. If any of the images have gone down or failed, try attempting a re-release.

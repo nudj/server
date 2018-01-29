@@ -1,21 +1,34 @@
 #!/bin/sh
 
-environment=${1:-development}
-server="nudj$environment"
-dumpDir="dbdump"
-# localPath="/keybase/private/nickcollings/backups/$environment/$(date '+%F')"
-localPath="/Users/nick/dev/nudj/backups/$environment/$(date '+%F')"
-remotePath="/home/nudjtech/$dumpDir"
-echo "Dumping $environment"
-command="docker-compose exec db /bin/sh -c \"arangodump --overwrite true --output-directory \"/dbdump\" --server.database \"nudj\" --server.username \"$DB_USER\" --server.password \"$DB_PASS\"\""
+environment=$1
+if [ -z "$1" ]
+then
+  echo "Must supply an environment - e.g. make backup ENV=development"
+  exit 1
+fi
 
-ssh -t $server bash -c "'
-cd $environment
-ls -la
-echo '======'
-sudo $command
-echo '======'
-'"
+server="nudj$environment"
+backupDir="dbbackup"
+localPath="/Users/nick/dev/nudj/backups/$environment/$(date '+%F')"
+
+echo "Dumping $environment"
 mkdir -p $localPath
-rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $server:$remotePath/ $localPath
+
+if [[ "$environment" = "development" || "$environment" = "staging" || "$environment" = "production" ]]; then
+  remotePath="/home/nudjtech/$backupDir"
+  command="docker-compose run --rm -v $remotePath:/dbdump db /bin/sh -c \"arangodump --overwrite true --output-directory \"/dbdump\" --server.endpoint http+tcp://db:8529 --server.database \"nudj\" --server.username \"$DB_USER\" --server.password \"$DB_PASS\"\""
+
+  ssh -t $server bash -c "'
+  cd $environment
+  echo '======'
+  sudo $command
+  echo '======'
+  '"
+  rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $server:$remotePath/ $localPath
+else
+  cd $environment
+  docker-compose run --rm -v $localPath:/$backupDir db /bin/sh -c "arangodump --overwrite true --output-directory \"/$backupDir\" --server.endpoint http+tcp://db:8529 --server.database \"nudj\" --server.username \"$DB_USER\" --server.password \"$DB_PASS\" && ls -la /$backupDir"
+  ls -la $localPath
+fi
+
 echo "\nBackup for $environment completed to $localPath"
