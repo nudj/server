@@ -1,3 +1,5 @@
+const get = require('lodash/get')
+
 async function up ({ db, step }) {
   await step('Set Company.client boolean to false for all companies', async () => {
     const companiesCollection = db.collection('companies')
@@ -35,6 +37,19 @@ async function up ({ db, step }) {
         }
       }
     }))
+  })
+
+  await step('Update accounts format', async () => {
+    const accountsCollection = db.collection('accounts')
+    const allAccounts = await accountsCollection.all()
+    await allAccounts.each(account => accountsCollection.update(account, {
+      type: 'GOOGLE',
+      data: {
+        accessToken: get(account, 'providers.google.accessToken', null),
+        refreshToken: get(account, 'providers.google.refreshToken', null)
+      },
+      providers: null
+    }, { keepNull: false }))
   })
 }
 
