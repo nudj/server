@@ -23,7 +23,8 @@ async function up ({ db, step }) {
       'surveyAnswers',
       'connections',
       'roles',
-      'sources'
+      'sources',
+      'employments'
     ].map(async name => {
       try {
         const collection = db.collection(name)
