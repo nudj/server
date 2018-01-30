@@ -37,7 +37,7 @@ if [[ "$environment" = "development" || "$environment" = "staging" || "$environm
   remotePath="/home/nudjtech/$dbmigrations"
   rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $PWD/migrations/ $server:$remotePath
 
-  command="docker-compose run --rm -v $remotePath:/$dbmigrations api /bin/sh -c \"node /$dbmigrations $migration $DB_USER $DB_PASS\" && rm -rf $remotePath"
+  command="docker-compose run --rm -v $remotePath:/usr/src/$dbmigrations api /bin/sh -c \"node ./$dbmigrations $migration $direction $DB_USER $DB_PASS\""
 
   ssh -t $server bash -c "'
   cd $environment
