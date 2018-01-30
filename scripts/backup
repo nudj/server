@@ -22,7 +22,7 @@ fi
 
 server="nudj$environment"
 backupDir="dbbackup"
-localPath="/Users/nick/dev/nudj/backups/$environment/$(date '+%F')"
+localPath="$PWD/../backups/$environment/$(date '+%F')"
 
 echo "Dumping $environment"
 mkdir -p $localPath
