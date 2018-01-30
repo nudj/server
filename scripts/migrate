@@ -1,0 +1,52 @@
+#!/bin/sh
+
+validEnvironment() {
+  [ "$1" = "local" ] || \
+  [ "$1" = "development" ] || \
+  [ "$1" = "staging" ] || \
+  [ "$1" = "production" ]
+}
+
+environment=$1
+if [ -z "$1" ]
+then
+  echo "Must supply an environment - e.g. ENV=development"
+  exit 1
+fi
+
+if ! validEnvironment $environment
+then
+  echo "Must supply a valid environment - local|development|staging|production"
+  exit 1
+fi
+
+migration=$2
+if [ -z "$2" ]
+then
+  echo "Must supply a migration name - e.g. MIGRATION=00000-init"
+  exit 1
+fi
+
+direction=${3:-up}
+server="nudj$environment"
+dbmigrations="dbmigrations"
+
+echo "Restoring $environment"
+
+if [[ "$environment" = "development" || "$environment" = "staging" || "$environment" = "production" ]]; then
+  remotePath="/home/nudjtech/$dbmigrations"
+  rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $PWD/migrations/ $server:$remotePath
+
+  command="docker-compose run --rm -v $remotePath:/$dbmigrations api /bin/sh -c \"node /$dbmigrations $migration $DB_USER $DB_PASS\" && rm -rf $remotePath"
+
+  ssh -t $server bash -c "'
+  cd $environment
+  echo '======'
+  sudo $command
+  echo '======'
+  '"
+else
+  bash -c "docker-compose -f ./local/docker-compose-dev.yml run --rm -v $PWD/migrations:/usr/src/dbmigrations api /bin/sh -c \"node ./dbmigrations $migration $direction $DB_USER $DB_PASS\""
+fi
+
+echo "\nApplication of $migration in direction $direction onto $environment complete"
