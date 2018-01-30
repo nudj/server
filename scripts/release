@@ -3,8 +3,7 @@
 validEnvironment() {
   [ "$1" = "development" ] || \
   [ "$1" = "staging" ] || \
-  [ "$1" = "production" ] || \
-  [ "$1" = "local" ]
+  [ "$1" = "production" ]
 }
 
 environment=$1
@@ -16,7 +15,7 @@ fi
 
 if ! validEnvironment $environment
 then
-  echo "Must supply a valid environment - e.g. development"
+  echo "Must supply a valid environment - e.g. ENV=development"
   exit 1
 fi
 
