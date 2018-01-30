@@ -108,7 +108,7 @@ Releases the most recent build image tagged with `latest` for each app to the sp
 1. Ensure you have ssh access to the relevant server (try running `ssh nudj[environment]` in the terminal)
 1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the environment dir you wish to release (ask for them from a colleague)
 1. Ensure the builds on the develop branch for all applications have completed without error on CodeFresh
-1. `make release ENV=[environment]` e.g. `make release ENV=Development`
+1. `make release ENV=[environment]` e.g. `make release ENV=development`
 1. Enter `nudjtech` password for environment (can be found in 1Password) when requested
 
 ## production
