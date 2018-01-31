@@ -56,6 +56,27 @@ async function up ({ db, step }) {
   })
 }
 
+await step('Update conversations format', async () => {
+  const hirersCollection = db.collection('hirers')
+  const conversationsCollection = db.collection('conversations')
+  const allConversations = await conversationsCollection.all()
+  await allConversations.each(conversation => {
+    if (conversation.person) return
+
+    const person = await hirersCollection.byExample({ person: conversation.hirer })
+
+    return conversationsCollection.update(conversation, {
+      person,
+      hirer: null,
+      type: 'GOOGLE',
+      job: null,
+      provider: null,
+      data: null,
+      threadId: conversation.threadId || conversation.data.threadId
+    }, { keepNull: false })
+  })
+})
+
 async function down ({ db, step }) {
   await step('Remove Company.client boolean from all companies', async () => {
     const companiesCollection = db.collection('companies')
@@ -111,6 +132,10 @@ async function down ({ db, step }) {
         type: null
       }, { keepNull: false })
     })
+  })
+
+  await step('Revert conversations format', async () => {
+
   })
 }
 
