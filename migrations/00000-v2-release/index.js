@@ -11,7 +11,7 @@ async function up ({ db, step }) {
     await allHirersCursor.each(hirer => hirersCollection.update(hirer, { onboarded: false }))
   })
 
-  await step('Truncating surveys collection', async () => {
+  await step('Truncate surveys collection', async () => {
     const surveysCollection = db.collection('surveys')
     await surveysCollection.truncate()
   })
@@ -132,7 +132,7 @@ async function down ({ db, step }) {
     }))
   })
 
-  await step('Revert accounts format', async () => {
+  await step('Truncate accounts collection', async () => {
     // cannot undo as is destructive so will just remove everything ready for a fresh import
     const accountsCollection = db.collection('accounts')
     await accountsCollection.truncate()
