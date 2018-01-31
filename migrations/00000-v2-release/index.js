@@ -1,5 +1,3 @@
-const get = require('lodash/get')
-
 async function up ({ db, step }) {
   await step('Set Company.client boolean to false for all companies', async () => {
     const companiesCollection = db.collection('companies')
