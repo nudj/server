@@ -31,7 +31,7 @@ direction=${3:-up}
 server="nudj$environment"
 dbmigrations="dbmigrations"
 
-echo "Restoring $environment"
+echo "Migrating $migration in direction $direction onto $environment"
 
 if [[ "$environment" = "development" || "$environment" = "staging" || "$environment" = "production" ]]; then
   remotePath="/home/nudjtech/$dbmigrations"
