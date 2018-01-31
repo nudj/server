@@ -54,28 +54,35 @@ async function up ({ db, step }) {
       }, { keepNull: false })
     })
   })
-}
 
-await step('Update conversations format', async () => {
-  const hirersCollection = db.collection('hirers')
-  const conversationsCollection = db.collection('conversations')
-  const allConversations = await conversationsCollection.all()
-  await allConversations.each(conversation => {
-    if (conversation.person) return
+  await step('Update conversations format', async () => {
+    const hirersCollection = db.collection('hirers')
+    const conversationsCollection = db.collection('conversations')
+    const allConversations = await conversationsCollection.all()
+    await allConversations.each(async conversation => {
+      if (conversation.person) return
+      let person
 
-    const person = await hirersCollection.byExample({ person: conversation.hirer })
+      try {
+        const hirer = await hirersCollection.document(conversation.hirer)
+        person = hirer.person
+      } catch (error) {
+        // some conversation.hirer values are person ids ¯\_(ツ)_/¯
+        person = conversation.hirer
+      }
 
-    return conversationsCollection.update(conversation, {
-      person,
-      hirer: null,
-      type: 'GOOGLE',
-      job: null,
-      provider: null,
-      data: null,
-      threadId: conversation.threadId || conversation.data.threadId
-    }, { keepNull: false })
+      return conversationsCollection.update(conversation, {
+        person,
+        hirer: null,
+        type: 'GOOGLE',
+        job: null,
+        provider: null,
+        data: null,
+        threadId: conversation.threadId || conversation.data.threadId
+      }, { keepNull: false })
+    })
   })
-})
+}
 
 async function down ({ db, step }) {
   await step('Remove Company.client boolean from all companies', async () => {
@@ -135,7 +142,20 @@ async function down ({ db, step }) {
   })
 
   await step('Revert conversations format', async () => {
-
+    const hirersCollection = db.collection('hirers')
+    const conversationsCollection = db.collection('conversations')
+    const allConversations = await conversationsCollection.all()
+    await allConversations.each(async conversation => {
+      if (conversation.hirer) return
+      const hirerRecord = await hirersCollection.firstExample({ person: conversation.person })
+      const hirer = hirerRecord._key
+      return conversationsCollection.update(conversation, {
+        hirer,
+        person: null,
+        provider: 'GMAIL',
+        type: null
+      }, { keepNull: false })
+    })
   })
 }
 
