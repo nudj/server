@@ -82,6 +82,28 @@ async function up ({ db, step }) {
       }, { keepNull: false })
     })
   })
+
+  await step('Remove ids from arango data', async () => {
+    // Due to a bug any updates to records performed in the admin tool were
+    // not removing the id from the data before patching. This should have been
+    // harmless but it allowed us to filter by id which does not strictly work
+    // for freshly added records. Essentially there is inconsistent data which
+    // must be resolved.
+
+    const collectionRemoveId = collection => record => collection.update(record, { id: null }, { keepNull: false })
+    const collectionNames = [
+      'companies',
+      'jobs',
+      'people',
+      'surveys'
+    ]
+
+    await Promise.all(collectionNames.map(async collectionName => {
+      const collection = db.collection(collectionName)
+      const cursor = await collection.all()
+      await cursor.each(collectionRemoveId(collection))
+    }))
+  })
 }
 
 async function down ({ db, step }) {
@@ -156,6 +178,10 @@ async function down ({ db, step }) {
         type: null
       }, { keepNull: false })
     })
+  })
+
+  await step('Not restoring any data ids', async () => {
+    // there is no required reverse migration
   })
 }
 
