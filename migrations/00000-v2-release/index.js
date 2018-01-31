@@ -39,20 +39,9 @@ async function up ({ db, step }) {
     }))
   })
 
-  await step('Update accounts format', async () => {
+  await step('Truncate accounts collection', async () => {
     const accountsCollection = db.collection('accounts')
-    const allAccounts = await accountsCollection.all()
-    await allAccounts.each(account => {
-      if (account.type && account.data) return
-      return accountsCollection.update(account, {
-        type: 'GOOGLE',
-        data: {
-          accessToken: get(account, 'providers.google.accessToken', null),
-          refreshToken: get(account, 'providers.google.refreshToken', null)
-        },
-        providers: null
-      }, { keepNull: false })
-    })
+    await accountsCollection.truncate()
   })
 
   await step('Update conversations format', async () => {
@@ -146,21 +135,9 @@ async function down ({ db, step }) {
   })
 
   await step('Revert accounts format', async () => {
-    const accountsCollection = db.collection('accounts')
-    const allAccounts = await accountsCollection.all()
-    await allAccounts.each(account => {
-      if (account.providers) return
-      return accountsCollection.update(account, {
-        providers: {
-          google: {
-            accessToken: get(account, 'data.accessToken', null),
-            refreshToken: get(account, 'data.refreshToken', null)
-          }
-        },
-        data: null,
-        type: null
-      }, { keepNull: false })
-    })
+    // cannot undo as is destructive so will just remove everything ready for a fresh import
+    const surveysCollection = db.collection('accounts')
+    await surveysCollection.truncate()
   })
 
   await step('Revert conversations format', async () => {
