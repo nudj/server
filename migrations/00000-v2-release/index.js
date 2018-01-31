@@ -136,8 +136,8 @@ async function down ({ db, step }) {
 
   await step('Revert accounts format', async () => {
     // cannot undo as is destructive so will just remove everything ready for a fresh import
-    const surveysCollection = db.collection('accounts')
-    await surveysCollection.truncate()
+    const accountsCollection = db.collection('accounts')
+    await accountsCollection.truncate()
   })
 
   await step('Revert conversations format', async () => {
