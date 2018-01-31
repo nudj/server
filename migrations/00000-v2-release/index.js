@@ -1,3 +1,5 @@
+const get = require('lodash/get')
+
 async function up ({ db, step }) {
   await step('Set Company.client boolean to false for all companies', async () => {
     const companiesCollection = db.collection('companies')
@@ -23,7 +25,8 @@ async function up ({ db, step }) {
       'surveyAnswers',
       'connections',
       'roles',
-      'sources'
+      'sources',
+      'employments'
     ].map(async name => {
       try {
         const collection = db.collection(name)
@@ -34,6 +37,50 @@ async function up ({ db, step }) {
         }
       }
     }))
+  })
+
+  await step('Update accounts format', async () => {
+    const accountsCollection = db.collection('accounts')
+    const allAccounts = await accountsCollection.all()
+    await allAccounts.each(account => {
+      if (account.type && account.data) return
+      return accountsCollection.update(account, {
+        type: 'GOOGLE',
+        data: {
+          accessToken: get(account, 'providers.google.accessToken', null),
+          refreshToken: get(account, 'providers.google.refreshToken', null)
+        },
+        providers: null
+      }, { keepNull: false })
+    })
+  })
+
+  await step('Update conversations format', async () => {
+    const hirersCollection = db.collection('hirers')
+    const conversationsCollection = db.collection('conversations')
+    const allConversations = await conversationsCollection.all()
+    await allConversations.each(async conversation => {
+      if (conversation.person) return
+      let person
+
+      try {
+        const hirer = await hirersCollection.document(conversation.hirer)
+        person = hirer.person
+      } catch (error) {
+        // some conversation.hirer values are person ids ¯\_(ツ)_/¯
+        person = conversation.hirer
+      }
+
+      return conversationsCollection.update(conversation, {
+        person,
+        hirer: null,
+        type: 'GOOGLE',
+        job: null,
+        provider: null,
+        data: null,
+        threadId: conversation.threadId || conversation.data.threadId
+      }, { keepNull: false })
+    })
   })
 }
 
@@ -74,6 +121,41 @@ async function down ({ db, step }) {
         }
       }
     }))
+  })
+
+  await step('Revert accounts format', async () => {
+    const accountsCollection = db.collection('accounts')
+    const allAccounts = await accountsCollection.all()
+    await allAccounts.each(account => {
+      if (account.providers) return
+      return accountsCollection.update(account, {
+        providers: {
+          google: {
+            accessToken: get(account, 'data.accessToken', null),
+            refreshToken: get(account, 'data.refreshToken', null)
+          }
+        },
+        data: null,
+        type: null
+      }, { keepNull: false })
+    })
+  })
+
+  await step('Revert conversations format', async () => {
+    const hirersCollection = db.collection('hirers')
+    const conversationsCollection = db.collection('conversations')
+    const allConversations = await conversationsCollection.all()
+    await allConversations.each(async conversation => {
+      if (conversation.hirer) return
+      const hirerRecord = await hirersCollection.firstExample({ person: conversation.person })
+      const hirer = hirerRecord._key
+      return conversationsCollection.update(conversation, {
+        hirer,
+        person: null,
+        provider: 'GMAIL',
+        type: null
+      }, { keepNull: false })
+    })
   })
 }
 
