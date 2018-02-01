@@ -40,9 +40,11 @@ if [[ "$environment" = "production" ]]; then
     echo "Must supply a api version - e.g. API=1.0.0"
     exit 1
   fi
+  image="nudj/server:${2}"
+else
+  image="nudj/server:${1}"
 fi
 
-image="nudj/server:${2}"
 web="nudj/web:${3:-latest}"
 hire="nudj/hire:${4:-latest}"
 admin="nudj/admin:${5:-latest}"

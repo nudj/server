@@ -1,7 +1,6 @@
 IMAGE:=nudj/server
 
 CWD=$(shell pwd)
-SERVER ?= $(ENV)
 
 .PHONY: build up down backup restore release
 
