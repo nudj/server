@@ -91,6 +91,13 @@ async function up ({ db, step }) {
       await cursor.each(collectionRemoveId(collection))
     }))
   })
+
+  await step('Archive conversations and create new conversations collection', async () => {
+    const oldConversationsCollection = db.collection('conversations')
+    await oldConversationsCollection.rename('conversationsArchive')
+    const newConversationsCollection = db.collection('conversations')
+    await newConversationsCollection.create()
+  })
 }
 
 async function down ({ db, step }) {
@@ -157,6 +164,13 @@ async function down ({ db, step }) {
 
   await step('Not restoring any data ids', async () => {
     // there is no required reverse migration
+  })
+
+  await step('Archive conversations and create new conversations collection', async () => {
+    const newConversationsCollection = db.collection('conversations')
+    await newConversationsCollection.drop()
+    const oldConversationsCollection = db.collection('conversationsArchive')
+    await oldConversationsCollection.rename('conversations')
   })
 }
 
