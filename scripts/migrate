@@ -2,7 +2,7 @@
 
 validEnvironment() {
   [ "$1" = "local" ] || \
-  [ "$1" = "development" ] || \
+  [ "$1" = "demo" ] || \
   [ "$1" = "staging" ] || \
   [ "$1" = "production" ]
 }
@@ -10,13 +10,13 @@ validEnvironment() {
 environment=$1
 if [ -z "$1" ]
 then
-  echo "Must supply an environment - e.g. ENV=development"
+  echo "Must supply an environment - e.g. ENV=demo"
   exit 1
 fi
 
 if ! validEnvironment $environment
 then
-  echo "Must supply a valid environment - local|development|staging|production"
+  echo "Must supply a valid environment - local|demo|staging|production"
   exit 1
 fi
 
@@ -33,7 +33,7 @@ dbmigrations="dbmigrations"
 
 echo "Migrating $migration in direction $direction onto $environment"
 
-if [[ "$environment" = "development" || "$environment" = "staging" || "$environment" = "production" ]]; then
+if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = "production" ]]; then
   remotePath="/home/nudjtech/$dbmigrations"
   rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $PWD/migrations/ $server:$remotePath
 

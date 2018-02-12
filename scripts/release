@@ -1,7 +1,7 @@
 #!/bin/sh
 
 validEnvironment() {
-  [ "$1" = "development" ] || \
+  [ "$1" = "demo" ] || \
   [ "$1" = "staging" ] || \
   [ "$1" = "production" ]
 }
@@ -9,13 +9,13 @@ validEnvironment() {
 environment=$1
 if [ -z "$1" ]
 then
-  echo "Must supply an environment - e.g. ENV=development"
+  echo "Must supply an environment - e.g. ENV=demo"
   exit 1
 fi
 
 if ! validEnvironment $environment
 then
-  echo "Must supply a valid environment - e.g. ENV=development"
+  echo "Must supply a valid environment - e.g. ENV=demo"
   exit 1
 fi
 

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 validEnvironment() {
-  [ "$1" = "development" ] || \
+  [ "$1" = "demo" ] || \
   [ "$1" = "staging" ] || \
   [ "$1" = "production" ] || \
   [ "$1" = "local" ]
@@ -10,20 +10,20 @@ validEnvironment() {
 environment=$1
 if [ -z "$1" ]
 then
-  echo "Must supply an environment - e.g. make restore ENV=development INPUT_DIR=/Users/nick/dev/nudj/backups/development/2018-01-29"
+  echo "Must supply an environment - e.g. make restore ENV=demo INPUT_DIR=/Users/nick/dev/nudj/backups/demo/2018-01-29"
   exit 1
 fi
 
 if ! validEnvironment $environment
 then
-  echo "Must supply a valid environment - e.g. ENV=development"
+  echo "Must supply a valid environment - e.g. ENV=demo"
   exit 1
 fi
 
 inputDir=$2
 if [ -z "$2" ]
 then
-  echo "Must supply an absolute path to the input directory - e.g. make restore ENV=development INPUT_DIR=/Users/nick/dev/nudj/backups/development/2018-01-29"
+  echo "Must supply an absolute path to the input directory - e.g. make restore ENV=demo INPUT_DIR=/Users/nick/dev/nudj/backups/demo/2018-01-29"
   exit 1
 fi
 
@@ -32,7 +32,7 @@ restoreDir="dbrestore"
 
 echo "Restoring $environment"
 
-if [[ "$environment" = "development" || "$environment" = "staging" || "$environment" = "production" ]]; then
+if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = "production" ]]; then
   remotePath="/home/nudjtech/$restoreDir"
   rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $inputDir/ $server:$remotePath
 
