@@ -9,10 +9,10 @@ steps:
     tag: demo
     working_directory: ${{main_clone}}/demo
     dockerfile: Dockerfile
-    # when:
-    #   branch:
-    #     only:
-    #       - develop
+    when:
+      branch:
+        only:
+          - develop
 
   build_staging:
     title: Build Staging Image
@@ -46,10 +46,10 @@ steps:
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'
-    # when:
-    #   branch:
-    #     only:
-    #       - develop
+    when:
+      branch:
+        only:
+          - develop
 
   push_staging:
     title: Push staging
