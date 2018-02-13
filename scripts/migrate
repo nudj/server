@@ -23,7 +23,7 @@ fi
 migration=$2
 if [ -z "$2" ]
 then
-  echo "Must supply a migration name - e.g. MIGRATION=00000-init"
+  echo "Must supply a migration name - e.g. MIGRATION=00000-seed-collections"
   exit 1
 fi
 
