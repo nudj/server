@@ -93,10 +93,22 @@ async function up ({ db, step }) {
   })
 
   await step('Archive conversations and create new conversations collection', async () => {
-    const oldConversationsCollection = db.collection('conversations')
-    await oldConversationsCollection.rename('conversationsArchive')
-    const newConversationsCollection = db.collection('conversations')
-    await newConversationsCollection.create()
+    try {
+      const oldConversationsCollection = db.collection('conversations')
+      await oldConversationsCollection.rename('conversationsArchive')
+    } catch (error) {
+      if (error.message !== `cannot rename collection: duplicate name`) {
+        throw error
+      }
+    }
+    try {
+      const newConversationsCollection = db.collection('conversations')
+      await newConversationsCollection.create()
+    } catch (error) {
+      if (error.message !== 'duplicate name: duplicate name') {
+        throw error
+      }
+    }
   })
 }
 
@@ -167,10 +179,22 @@ async function down ({ db, step }) {
   })
 
   await step('Archive conversations and create new conversations collection', async () => {
-    const newConversationsCollection = db.collection('conversations')
-    await newConversationsCollection.drop()
-    const oldConversationsCollection = db.collection('conversationsArchive')
-    await oldConversationsCollection.rename('conversations')
+    try {
+      const newConversationsCollection = db.collection('conversations')
+      await newConversationsCollection.drop()
+    } catch (error) {
+      if (error.message !== `unknown collection 'conversations'`) {
+        throw error
+      }
+    }
+    try {
+      const oldConversationsCollection = db.collection('conversationsArchive')
+      await oldConversationsCollection.rename('conversations')
+    } catch (error) {
+      if (error.message !== `cannot rename collection: duplicate name`) {
+        throw error
+      }
+    }
   })
 }
 
