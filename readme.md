@@ -4,7 +4,7 @@
 
 HTTP layer covering of all the nudj microservices
 
-NB all instances of `[environment]` should be replaced by the environment in question - `development`, `staging` or `production`
+NB all instances of `[environment]` should be replaced by the environment in question - `staging`, `demo` or `production`
 
 # Intro
 
@@ -80,7 +80,7 @@ Emulates the live environment without rebuilding on file change.
 1. Ensure you have ssh access to the relevant server (try running `ssh nudj[environment]` in the terminal). Ignore this step for local env
 1. `yarn`
 1. Ensure you have a `.env-api` file inside each environment dir you want to back up
-1. `make backup ENV=[environment]` e.g. `make backup ENV=development`
+1. `make backup ENV=[environment]` e.g. `make backup ENV=staging`
 1. Enter `nudjtech` password for environment (can be found in 1Password) if requested
 1. Backup will be found in the directory reported in the logs
 
@@ -101,14 +101,14 @@ Emulates the live environment without rebuilding on file change.
 
 # Releases
 
-## development or staging
+## staging or demo
 
 Releases the most recent build image tagged with `latest` for each app to the specified environment. Check CI on the `develop` branches to track the image building progress and double check what you are deploying.
 
 1. Ensure you have ssh access to the relevant server (try running `ssh nudj[environment]` in the terminal)
 1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the environment dir you wish to release (ask for them from a colleague)
 1. Ensure the builds on the develop branch for all applications have completed without error on CodeFresh
-1. `make release ENV=[environment]` e.g. `make release ENV=development`
+1. `make release ENV=[environment]` e.g. `make release ENV=staging`
 1. Enter `nudjtech` password for environment (can be found in 1Password) when requested
 
 ## production
@@ -128,7 +128,7 @@ Releases the most recent build image tagged with `latest` for each app to the sp
 # Debugging environments
 
 1. If you have ssh access, you can run `ssh nudj[environment]` to access the environment logs.
-1. Once inside the container, run `cd [environment]`. e.g. `cd development`
+1. Once inside the container, run `cd [environment]`. e.g. `cd staging`
 1. To get an overview of the docker images' processes, run `sudo docker-compose ps`
 1. Enter `nudjtech` password for the given environment (can be found in 1Password) when prompted
 1. If any of the images have gone down or failed, try attempting a re-release.
