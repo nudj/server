@@ -2,12 +2,12 @@ version: '1.0'
 
 steps:
 
-  build_development:
-    title: Build Development Image
+  build_demo:
+    title: Build Demo Image
     type: build
     image_name: nudj/server
-    tag: development
-    working_directory: ${{main_clone}}/development
+    tag: demo
+    working_directory: ${{main_clone}}/demo
     dockerfile: Dockerfile
     when:
       branch:
@@ -38,11 +38,11 @@ steps:
         only:
           - master
 
-  push_development:
-    title: Push development
+  push_demo:
+    title: Push demo
     type: push
-    candidate: '${{build_development}}'
-    tag: development
+    candidate: '${{build_demo}}'
+    tag: demo
     credentials:
       username: '${{dockerUsername}}'
       password: '${{dockerPassword}}'

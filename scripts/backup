@@ -1,7 +1,7 @@
 #!/bin/sh
 
 validEnvironment() {
-  [ "$1" = "development" ] || \
+  [ "$1" = "demo" ] || \
   [ "$1" = "staging" ] || \
   [ "$1" = "production" ] || \
   [ "$1" = "local" ]
@@ -10,13 +10,13 @@ validEnvironment() {
 environment=$1
 if [ -z "$1" ]
 then
-  echo "Must supply an environment - e.g. make backup ENV=development"
+  echo "Must supply an environment - e.g. make backup ENV=demo"
   exit 1
 fi
 
 if ! validEnvironment $environment
 then
-  echo "Must supply a valid environment - e.g. ENV=development"
+  echo "Must supply a valid environment - e.g. ENV=demo"
   exit 1
 fi
 
@@ -27,7 +27,7 @@ localPath="$PWD/../backups/$environment/$(date '+%F')"
 echo "Dumping $environment"
 mkdir -p $localPath
 
-if [[ "$environment" = "development" || "$environment" = "staging" || "$environment" = "production" ]]; then
+if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = "production" ]]; then
   remotePath="/home/nudjtech/$backupDir"
   command="docker-compose run --rm -v $remotePath:/dbdump db /bin/sh -c \"arangodump --overwrite true --output-directory \"/dbdump\" --server.endpoint http+tcp://db:8529 --server.database \"nudj\" --server.username \"$DB_USER\" --server.password \"$DB_PASS\"\""
 
