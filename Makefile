@@ -5,7 +5,7 @@ CWD=$(shell pwd)
 .PHONY: build up down backup restore release
 
 build:
-	@docker build -t $(IMAGE):$(ENV) $(ENV)
+	@docker build -t $(IMAGE):local local
 
 up:
 	@cd local && \
