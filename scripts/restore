@@ -47,7 +47,7 @@ if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = 
   '"
 else
   cd local
-  bash -c "docker-compose run --rm -v $inputDir:/dbrestore db /bin/sh -c \"arangorestore --input-directory \"/dbrestore\" --server.endpoint http+tcp://db:8529 --server.database \"nudj\" --server.username \"$DB_USER\" --server.password \"$DB_PASS\"\""
+  bash -c "docker-compose -p nudj run --rm -v $inputDir:/dbrestore db /bin/sh -c \"arangorestore --input-directory \"/dbrestore\" --server.endpoint http+tcp://db:8529 --server.database \"nudj\" --server.username \"$DB_USER\" --server.password \"$DB_PASS\"\""
 fi
 
 echo "\nRestoration of $inputDir onto $environment complete"

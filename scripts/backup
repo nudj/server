@@ -40,7 +40,7 @@ if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = 
   rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $server:$remotePath/ $localPath
 else
   cd $environment
-  docker-compose run --rm -v $localPath:/$backupDir db /bin/sh -c "arangodump --overwrite true --output-directory \"/$backupDir\" --server.endpoint http+tcp://db:8529 --server.database \"nudj\" --server.username \"$DB_USER\" --server.password \"$DB_PASS\" && ls -la /$backupDir"
+  docker-compose -p nudj run --rm -v $localPath:/$backupDir db /bin/sh -c "arangodump --overwrite true --output-directory \"/$backupDir\" --server.endpoint http+tcp://db:8529 --server.database \"nudj\" --server.username \"$DB_USER\" --server.password \"$DB_PASS\" && ls -la /$backupDir"
   ls -la $localPath
 fi
 
