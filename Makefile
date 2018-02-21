@@ -1,4 +1,5 @@
 IMAGE:=nudj/server
+IMAGEUI:=nudj/test-ui
 
 CWD=$(shell pwd)
 
@@ -6,6 +7,7 @@ CWD=$(shell pwd)
 
 build:
 	@docker build -t $(IMAGE):local local
+	@docker build -t $(IMAGEUI) test/ui
 
 up:
 	@cd local && \
