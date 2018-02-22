@@ -29,9 +29,9 @@ This has been broken down into folders holding configurations for each environme
 
 The files/dirs in **bold** are gitignored and so should be copied from a colleague or 1Password.
 
-# End-to-end development
+# Getting started
 
-Allows for end to end testing of all the apps together. Emulates the live environment with rebuilding on file change.
+## Setup
 
 1. Ensure `/etc/hosts` on your host machine has the following entries
   ```
@@ -42,9 +42,12 @@ Allows for end to end testing of all the apps together. Emulates the live enviro
   127.0.0.1 local.gql.nudj.co
   127.0.0.1 local.db.nudj.co
   ```
-1. Ensure you have run `make build` inside `server`, `web`, `hire`, `admin` and `api`
+
+## Running the Core Applications
+
 1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the `./local` dir (ask for them from a colleague)
-1. From the project root run `make up` to start the platform in develop mode
+1. `make build` to ensure you have a current build of the `server` application
+1. `make up` to spin up the `server`, `redis` and `db` containers
 1. On first run...
   1. Copy the generated Arango root password from the logs in the console
   1. Go to `https://local.db.nudj.co/`
@@ -56,10 +59,8 @@ Allows for end to end testing of all the apps together. Emulates the live enviro
 1. Wait until everything has built then access the sites on the `local.` domains
 1. On first run...
   1. You will need to add data to the db in order for the apps to work. Ask a colleague to show you what minimum data this is in order to get various pages working :)
-1. Saving files in any of the applications will trigger a rebuild of that app
-1. `ctrl-c` to quit the logs and return to command line (platform remains running headlessly in the background)
-1. `make up` at any time to force recreate the platform (useful for environment changes)
-1. `make down` to close down the platform and free up resources
+1. `make up` at any time to force recreate the Core Applications (useful for environment changes)
+1. `make down` to close down the Core Applications and free up resources
 
 # Full production emulation
 
