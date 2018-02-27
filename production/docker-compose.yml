@@ -37,7 +37,7 @@ services:
       - redis
       - api
   api:
-    image: nudj/api:8.4.0
+    image: nudj/api:8.4.1
     env_file: .env-api
     depends_on:
       - db
