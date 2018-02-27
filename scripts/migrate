@@ -46,7 +46,7 @@ if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = 
   echo '======'
   '"
 else
-  bash -c "docker-compose -f ./local/docker-compose-dev.yml run --rm -v $PWD/migrations:/usr/src/dbmigrations api /bin/sh -c \"node ./dbmigrations $migration $direction $DB_USER $DB_PASS\""
+  bash -c "docker-compose -f ./docker-compose.yml -f ../api/docker-compose.yml -p nudj run --rm -v $PWD/migrations:/usr/src/dbmigrations api /bin/sh -c \"node ./dbmigrations $migration $direction $DB_USER $DB_PASS\""
 fi
 
 echo "\nApplication of $migration in direction $direction onto $environment complete"

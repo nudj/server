@@ -1,20 +1,23 @@
 IMAGE:=nudj/server
-
+IMAGEUI:=nudj/test-ui
+COREAPPS:=server redis db
+DOCKERCOMPOSE:=docker-compose -p nudj
 CWD=$(shell pwd)
 
 .PHONY: build up down backup restore release
 
 build:
-	@docker build -t $(IMAGE):local local
+	@docker build -t $(IMAGE):development local
+	@docker build -t $(IMAGEUI) test/ui
 
 up:
-	@cd local && \
-		docker-compose -f $(CWD)/local/docker-compose-dev.yml up -d --force-recreate && \
-		docker-compose -f $(CWD)/local/docker-compose-dev.yml logs -f
+	@$(DOCKERCOMPOSE) up -d --force-recreate --no-deps $(COREAPPS)
+
+logs:
+	@$(DOCKERCOMPOSE) logs -f $(COREAPPS)
 
 down:
-	@cd local && \
-		docker-compose -f $(CWD)/local/docker-compose-dev.yml down
+	@$(DOCKERCOMPOSE) rm -f -s $(COREAPPS)
 
 backup:
 	@env -i $$(node ./scripts/extract-envkeys.js $(ENV) DB_USER DB_PASS) ./scripts/backup $(ENV)
