@@ -6,10 +6,15 @@ async function up ({ db, step }) {
       [source._key]: source.name.toUpperCase()
     }), {})
 
-    const connectionsCollection = db.collection('connections')
-    const connectionsAll = await connectionsCollection.all()
-    await connectionsAll.each(connection => connectionsCollection.update(connection, {
-      source: sourcesMap[connection.source] || connection.source
+    await Promise.all([
+      'connections',
+      'employments'
+    ].map(async name => {
+      const collection = db.collection(name)
+      const all = await collection.all()
+      await all.each(item => collection.update(item, {
+        source: sourcesMap[item.source] || item.source
+      }))
     }))
   })
 
@@ -44,10 +49,15 @@ async function down ({ db, step }) {
       [source.name.toUpperCase()]: source._key
     }), {})
 
-    const connectionsCollection = db.collection('connections')
-    const connectionsAll = await connectionsCollection.all()
-    await connectionsAll.each(connection => connectionsCollection.update(connection, {
-      source: sourcesMap[connection.source] || connection.source
+    await Promise.all([
+      'connections',
+      'employments'
+    ].map(async name => {
+      const collection = db.collection(name)
+      const all = await collection.all()
+      await all.each(item => collection.update(item, {
+        source: sourcesMap[item.source] || item.source
+      }))
     }))
   })
 }
