@@ -1,13 +1,14 @@
+require('envkey')
 const { Database } = require('arangojs')
 const db = new Database({
   url: 'http://db:8529'
 })
-const [migrationName, direction, dbUser, dbPassword] = process.argv.slice(2)
+const [migrationName, direction] = process.argv.slice(2)
 
-db.useDatabase('nudj')
-db.useBasicAuth(dbUser, dbPassword)
+db.useDatabase(process.env.DB_NAME)
+db.useBasicAuth(process.env.DB_USER, process.env.DB_PASS)
 
-const migration = require(`./${migrationName}`)
+const migration = require(`./migrations/${migrationName}`)
 
 async function step (description, actions) {
   process.stdout.write(description)

@@ -1,0 +1,39 @@
+{
+  "name": "devops",
+  "version": "1.0.0",
+  "description": "Devops Commands",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nudj/server.git"
+  },
+  "author": "Nick Collings (nick@nudj.co)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nudj/server/issues"
+  },
+  "homepage": "https://github.com/nudj/server#readme",
+  "dependencies": {
+    "@nudj/api": "10.0.0",
+    "@nudj/library": "4.3.0",
+    "arangojs": "^6.1.1",
+    "envkey": "^1.0.0",
+    "graphql": "0.10.3",
+    "pluralize": "5.0.0"
+  },
+  "devDependencies": {
+    "chai": "3.5.0",
+    "chai-as-promised": "6.0.0",
+    "dirty-chai": "1.2.2",
+    "mocha": "3.2.0",
+    "nodemon": "1.11.0",
+    "proxyquire": "1.7.11",
+    "sinon": "1.17.7",
+    "sinon-as-promised": "4.0.2",
+    "sinon-chai": "2.8.0",
+    "standard": "9.0.0"
+  }
+}

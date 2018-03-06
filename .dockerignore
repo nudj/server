@@ -1,0 +1,15 @@
+!.cache
+.git
+node_modules
+demo
+development
+local
+production
+staging
+test
+!src/test
+codefresh.yml
+CODEOWNERS
+docker-compose.yml
+Makefile
+.DS_Store

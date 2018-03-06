@@ -17,7 +17,7 @@ async function down ({ db, step }) {
       const collection = db.collection('events')
       await collection.drop()
     } catch (error) {
-      if (error.message !== `unknown collection '${name}'`) {
+      if (error.message !== `unknown collection 'events'`) {
         throw error
       }
     }
