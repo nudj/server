@@ -29,15 +29,15 @@ fi
 
 direction=${3:-up}
 server="nudj$environment"
-dbmigrations="dbmigrations"
+migrationsDir="migrations"
 
 echo "Migrating $migration in direction $direction onto $environment"
 
 if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = "production" ]]; then
-  remotePath="/home/nudjtech/$dbmigrations"
-  rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $PWD/migrations/ $server:$remotePath
+  remotePath="/home/nudjtech/$migrationsDir"
+  rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $PWD/../api/src/migrationsDir/ $server:$remotePath
 
-  command="docker-compose run --rm -v $remotePath:/usr/src/$dbmigrations api /bin/sh -c \"node ./$dbmigrations $migration $direction $DB_USER $DB_PASS\""
+  command="docker-compose run --rm -v $remotePath:/usr/src/$migrationsDir api /bin/sh -c \"node ./$migrationsDir $migration $direction $DB_USER $DB_PASS\""
 
   ssh -t $server bash -c "'
   cd $environment
@@ -46,7 +46,7 @@ if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = 
   echo '======'
   '"
 else
-  bash -c "docker-compose -f ./docker-compose.yml -f ../api/docker-compose.yml -p nudj run --rm -v $PWD/migrations:/usr/src/dbmigrations api /bin/sh -c \"node ./dbmigrations $migration $direction $DB_USER $DB_PASS\""
+  bash -c "docker-compose -f ./docker-compose.yml -f ../api/docker-compose.yml -p nudj run --rm -v $PWD/../api/src/$migrationsDir:/usr/src/$migrationsDir api /bin/sh -c \"node ./$migrationsDir $migration $direction $DB_USER $DB_PASS\""
 fi
 
 echo "\nApplication of $migration in direction $direction onto $environment complete"
