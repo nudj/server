@@ -35,7 +35,7 @@ echo "Migrating $migration in direction $direction onto $environment"
 
 if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = "production" ]]; then
   remotePath="/home/nudjtech/$migrationsDir"
-  rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $PWD/../api/src/migrationsDir/ $server:$remotePath
+  rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $PWD/../api/src/$migrationsDir/ $server:$remotePath
 
   command="docker-compose run --rm -v $remotePath:/usr/src/$migrationsDir api /bin/sh -c \"node ./$migrationsDir $migration $direction $DB_USER $DB_PASS\""
 
