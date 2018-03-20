@@ -1,7 +1,7 @@
 version: '2'
 services:
   server:
-    image: nudj/server:development
+    image: nudj/server:demo
     volumes:
       - ./ssl:/etc/ssl
       - ./.htpasswd:/etc/nginx/.htpasswd

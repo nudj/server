@@ -1,0 +1,53 @@
+#!/bin/sh
+
+validEnvironment() {
+  [ "$1" = "demo" ] || \
+  [ "$1" = "staging" ] || \
+  [ "$1" = "production" ] || \
+  [ "$1" = "local" ]
+}
+
+environment=$1
+if [ -z "$1" ]
+then
+  echo "Must supply an environment - e.g. make restore ENV=demo INPUT_DIR=/Users/nick/dev/nudj/backups/demo/2018-01-29"
+  exit 1
+fi
+
+if ! validEnvironment $environment
+then
+  echo "Must supply a valid environment - e.g. ENV=demo"
+  exit 1
+fi
+
+inputDir=$2
+if [ -z "$2" ]
+then
+  echo "Must supply an absolute path to the input directory - e.g. make restore ENV=demo INPUT_DIR=/Users/nick/dev/nudj/backups/demo/2018-01-29"
+  exit 1
+fi
+
+server="nudj$environment"
+restoreDir="dbrestore"
+
+echo "Restoring $environment"
+
+if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = "production" ]]; then
+  remotePath="/home/nudjtech/$restoreDir"
+  rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $inputDir/ $server:$remotePath
+
+  command="docker-compose run --rm -v $remotePath:/dbrestore db /bin/sh -c \"arangorestore --input-directory \"/dbrestore\" --server.endpoint http+tcp://db:8529 --server.database \"nudj\" --server.username \"$DB_USER\" --server.password \"$DB_PASS\"\""
+
+  ssh -t $server bash -c "'
+  cd $environment
+  ls -la
+  echo '======'
+  sudo $command
+  echo '======'
+  '"
+else
+  cd local
+  bash -c "docker-compose -p nudj run --rm -v $inputDir:/dbrestore db /bin/sh -c \"arangorestore --input-directory \"/dbrestore\" --server.endpoint http+tcp://db:8529 --server.database \"nudj\" --server.username \"$DB_USER\" --server.password \"$DB_PASS\"\""
+fi
+
+echo "\nRestoration of $inputDir onto $environment complete"

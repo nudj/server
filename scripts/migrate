@@ -1,0 +1,52 @@
+#!/bin/sh
+
+validEnvironment() {
+  [ "$1" = "local" ] || \
+  [ "$1" = "demo" ] || \
+  [ "$1" = "staging" ] || \
+  [ "$1" = "production" ]
+}
+
+environment=$1
+if [ -z "$1" ]
+then
+  echo "Must supply an environment - e.g. ENV=demo"
+  exit 1
+fi
+
+if ! validEnvironment $environment
+then
+  echo "Must supply a valid environment - local|demo|staging|production"
+  exit 1
+fi
+
+migration=$2
+if [ -z "$2" ]
+then
+  echo "Must supply a migration name - e.g. MIGRATION=00000-seed-collections"
+  exit 1
+fi
+
+direction=${3:-up}
+server="nudj$environment"
+migrationsDir="migrations"
+
+echo "Migrating $migration in direction $direction onto $environment"
+
+if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = "production" ]]; then
+  remotePath="/home/nudjtech/$migrationsDir"
+  rsync -avz --delete -e "ssh" --rsync-path="sudo rsync" $PWD/../api/src/$migrationsDir/ $server:$remotePath
+
+  command="docker-compose run --rm -v $remotePath:/usr/src/$migrationsDir api /bin/sh -c \"node ./$migrationsDir $migration $direction $DB_USER $DB_PASS\""
+
+  ssh -t $server bash -c "'
+  cd $environment
+  echo '======'
+  sudo $command
+  echo '======'
+  '"
+else
+  bash -c "docker-compose -f ./docker-compose.yml -f ../api/docker-compose.yml -p nudj run --rm -v $PWD/../api/src/$migrationsDir:/usr/src/$migrationsDir api /bin/sh -c \"node ./$migrationsDir $migration $direction $DB_USER $DB_PASS\""
+fi
+
+echo "\nApplication of $migration in direction $direction onto $environment complete"
