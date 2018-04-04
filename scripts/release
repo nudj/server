@@ -19,36 +19,39 @@ then
   exit 1
 fi
 
+sync=$2
+
 if [[ "$environment" = "production" ]]; then
-  if [ -z "$2" ]; then
+  if [ -z "$3" ]; then
     echo "Must supply a server version - e.g. SERVER=1.0.0"
     exit 1
   fi
-  if [ -z "$3" ]; then
+  if [ -z "$4" ]; then
     echo "Must supply a web version - e.g. WEB=1.0.0"
     exit 1
   fi
-  if [ -z "$4" ]; then
+  if [ -z "$5" ]; then
     echo "Must supply a hire version - e.g. HIRE=1.0.0"
     exit 1
   fi
-  if [ -z "$5" ]; then
+  if [ -z "$6" ]; then
     echo "Must supply a admin version - e.g. ADMIN=1.0.0"
     exit 1
   fi
-  if [ -z "$6" ]; then
+  if [ -z "$7" ]; then
     echo "Must supply a api version - e.g. API=1.0.0"
     exit 1
   fi
-  image="nudj/server:${2}"
+  image="nudj/server:${3}"
 else
+  # server tag should match environment when not production
   image="nudj/server:${1}"
 fi
 
-web="nudj/web:${3:-latest}"
-hire="nudj/hire:${4:-latest}"
-admin="nudj/admin:${5:-latest}"
-api="nudj/api:${6:-latest}"
+web="nudj/web:${4:-latest}"
+hire="nudj/hire:${5:-latest}"
+admin="nudj/admin:${6:-latest}"
+api="nudj/api:${7:-latest}"
 maintenance="nudj/maintenance:latest"
 server="nudj$environment"
 localPath="$environment"
@@ -56,7 +59,9 @@ remotePath="/home/nudjtech/$environment"
 
 echo "Deploying $environment"
 
-rsync -avz --delete --delete-excluded --exclude=Dockerfile --exclude=service.conf --exclude=.DS_Store --exclude=.dockerignore --exclude=dbdump $localPath/ $server:$remotePath
+if [[ "$sync" = "true" ]]; then
+  rsync -avz --delete --delete-excluded --exclude=Dockerfile --exclude=service.conf --exclude=.DS_Store --exclude=.dockerignore --exclude=dbdump $localPath/ $server:$remotePath
+fi
 ssh -t $server bash -c "'
 cd $environment
 sudo docker ps
