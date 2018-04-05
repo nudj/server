@@ -1,0 +1,12 @@
+#!/bin/sh
+
+environment=$1
+migration=$2
+direction=$3
+dockerRun=${4:-'docker-compose run --rm'}
+migrationsDir=${5:-'/home/nudjtech/migrations'}
+
+cd $environment
+
+echo "$environment: Executing migrate script on api service\n"
+$dockerRun -v $migrationsDir:/usr/src/migrations api /bin/sh -c "node /usr/src/migrations $migration $direction"

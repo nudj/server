@@ -1,0 +1,65 @@
+#!/bin/sh
+
+validEnvironment() {
+  [ "$1" = "demo" ] || \
+  [ "$1" = "staging" ] || \
+  [ "$1" = "production" ] || \
+  [ "$1" = "local" ]
+}
+
+environment=$1
+if [ -z "$1" ]
+then
+  echo "Must supply an environment - e.g. make restore ENV=demo INPUT_DIR=/Users/nick/dev/nudj/backups/demo/2018-01-29"
+  exit 1
+fi
+
+if ! validEnvironment $environment
+then
+  echo "Must supply a valid environment - e.g. ENV=demo"
+  exit 1
+fi
+
+inputDir=$2
+if [ -z "$2" ]
+then
+  echo "Must supply an absolute path to the input directory - e.g. make restore ENV=demo INPUT_DIR=/Users/nick/dev/nudj/backups/demo/2018-01-29"
+  exit 1
+fi
+
+server="nudj$environment"
+
+echo "local: Restoring $environment"
+
+if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = "production" ]]; then
+
+  echo "local: Syncing devops scripts to $environment"
+  rsync -az --delete -e "ssh" $PWD/devops/remote/ $server:/home/nudjtech/devops
+
+  echo "local: Syncing restore data to $environment"
+  rsync -az --delete -e "ssh" $inputDir/ $server:/home/nudjtech/dbrestore
+
+  echo "local: Executing restore script on $environment"
+  ssh -t $server /bin/sh -c "'/home/nudjtech/devops/restore $environment'"
+  exitCode=$?
+
+else
+
+  dockerRun="docker-compose -p nudj -f $PWD/docker-compose.yml -f $PWD/../api/docker-compose.yml run --rm"
+  devopsDir="$PWD/devops/remote"
+  localInputDir="$PWD/localInput"
+
+  echo "local: Copying input data into temporary local input directory"
+  cp -r $inputDir $localInputDir
+
+  echo "local: Executing restore script locally"
+  $PWD/devops/remote/restore "local" "$dockerRun" "$devopsDir" "$localInputDir"
+  exitCode=$?
+
+  echo "local: Removing temporary local input data"
+  rm -rf $localInputDir
+
+fi
+
+[[ $exitCode = 0 ]] && result="complete 👍" || result="failed 👎"
+echo "\nlocal: Restoration of $inputDir onto $environment $result"

@@ -50,4 +50,3 @@ services:
     env_file: .env-db
     volumes:
       - ../dbdata:/var/lib/arangodb3
-      - ../dbdump:/dbdump

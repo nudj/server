@@ -16,7 +16,5 @@
     "url": "https://github.com/nudj/server/issues"
   },
   "homepage": "https://github.com/nudj/server#readme",
-  "dependencies": {
-    "envkey": "^1.0.0"
-  }
+  "dependencies": {}
 }

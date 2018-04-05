@@ -1,0 +1,55 @@
+#!/bin/sh
+
+validEnvironment() {
+  [ "$1" = "local" ] || \
+  [ "$1" = "demo" ] || \
+  [ "$1" = "staging" ] || \
+  [ "$1" = "production" ]
+}
+
+environment=$1
+if [ -z "$1" ]
+then
+  echo "Must supply an environment - e.g. ENV=demo"
+  exit 1
+fi
+
+if ! validEnvironment $environment
+then
+  echo "Must supply a valid environment - local|demo|staging|production"
+  exit 1
+fi
+
+migration=$2
+if [ -z "$2" ]
+then
+  echo "Must supply a migration name - e.g. MIGRATION=00000-seed-collections"
+  exit 1
+fi
+
+direction=${3:-up}
+server="nudj$environment"
+migrationsDir="$PWD/../api/src/migrations"
+
+echo "Migrating $migration in direction $direction onto $environment"
+
+if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = "production" ]]; then
+  echo "local: Syncing devops scripts to $environment"
+  rsync -az --delete -e "ssh" $PWD/devops/remote/ $server:/home/nudjtech/devops
+
+  echo "local: Syncing migration scripts to $environment"
+  rsync -az --delete -e "ssh" $migrationsDir/ $server:/home/nudjtech/migrations
+
+  echo "local: Executing migrate script on $environment"
+  ssh -t $server /bin/sh -c "'/home/nudjtech/devops/migrate $environment $migration $direction'"
+  exitCode=$?
+else
+  dockerRun="docker-compose -p nudj -f $PWD/docker-compose.yml -f $PWD/../api/docker-compose.yml run --rm"
+
+  echo "local: Executing migration script locally"
+  $PWD/devops/remote/migrate "local" "$migration" "$direction" "$dockerRun" "$migrationsDir"
+  exitCode=$?
+fi
+
+[[ $exitCode = 0 ]] && result="complete 👍" || result="failed 👎"
+echo "\nlocal: Application of $migration in direction $direction onto $environment $result"
