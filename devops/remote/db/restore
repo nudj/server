@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "Restoring database $DB_NAME at http+tcp://$DB_HOST:$DB_PORT using user $DB_USER"
+arangorestore --input-directory /dbrestore --server.endpoint http+tcp://$DB_HOST:$DB_PORT --server.database $DB_NAME --server.username $DB_USER --server.password $DB_PASS

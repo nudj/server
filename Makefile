@@ -21,13 +21,13 @@ down:
 	@$(DOCKERCOMPOSE) rm -f -s $(COREAPPS)
 
 backup:
-	@env -i $$(node ./scripts/extract-envkeys.js $(ENV) DB_USER DB_PASS) ./scripts/backup $(ENV)
+	@./devops/backup $(ENV)
 
 restore:
-	@env -i $$(node ./scripts/extract-envkeys.js $(ENV) DB_USER DB_PASS) ./scripts/restore $(ENV) $(INPUT_DIR)
+	@./devops/restore $(ENV) $(INPUT_DIR)
 
 release:
-	@./scripts/release $(ENV) $(SYNC) $(SERVER) $(WEB) $(HIRE) $(ADMIN) $(API)
+	@./devops/release $(ENV) $(SYNC) $(SERVER) $(WEB) $(HIRE) $(ADMIN) $(API)
 
 migrate:
-	@env -i $$(node ./scripts/extract-envkeys.js $(ENV) DB_USER DB_PASS) ./scripts/migrate $(ENV) $(MIGRATION) $(DIRECTION)
+	@./devops/migrate $(ENV) $(MIGRATION) $(DIRECTION)

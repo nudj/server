@@ -60,25 +60,25 @@ remotePath="/home/nudjtech/$environment"
 echo "Deploying $environment"
 
 if [[ "$sync" = "true" ]]; then
-  rsync -avz --delete --delete-excluded --exclude=Dockerfile --exclude=service.conf --exclude=.DS_Store --exclude=.dockerignore --exclude=dbdump $localPath/ $server:$remotePath
+  rsync -avz --delete --delete-excluded --exclude=Dockerfile --exclude=service.conf --exclude=.DS_Store --exclude=.dockerignore $localPath/ $server:$remotePath
 fi
 ssh -t $server bash -c "'
 cd $environment
-sudo docker ps
+docker ps
 echo ''
-sudo docker pull $image
+docker pull $image
 echo ''
-sudo docker pull $web
+docker pull $web
 echo ''
-sudo docker pull $hire
+docker pull $hire
 echo ''
-sudo docker pull $admin
+docker pull $admin
 echo ''
-sudo docker pull $api
+docker pull $api
 echo ''
-sudo docker pull $maintenance
+docker pull $maintenance
 echo ''
-sudo docker-compose up -d --remove-orphans --force-recreate
+docker-compose up -d --remove-orphans --force-recreate
 echo ''
-sudo docker ps
+docker ps
 '"
