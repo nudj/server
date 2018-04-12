@@ -2,6 +2,7 @@ version: '2'
 services:
   server:
     image: nudj/server:development
+    restart: always
     volumes:
       - ../server/local/ssl:/etc/ssl
       - ../server/local/.htpasswd:/etc/nginx/.htpasswd
@@ -10,12 +11,14 @@ services:
       - "443:443"
   redis:
     image: redis:alpine
+    restart: always
     ports:
       - "6379:6379"
     volumes:
       - ../server/local/sessionData:/data
   db:
     image: arangodb:3.1.17
+    restart: always
     env_file: ../server/local/.env-db
     volumes:
       - ../server/local/dbdata:/var/lib/arangodb3
@@ -23,5 +26,6 @@ services:
       - "8529:8529"
   ui:
     image: nudj/test-ui
+    restart: always
     shm_size: 1gb
     cap_add: ['SYS_ADMIN']
