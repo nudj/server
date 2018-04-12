@@ -94,16 +94,16 @@ Emulates the live environment without rebuilding on file change.
 1. `make restore ENV=[environment] INPUT_DIR=[inputDir]` e.g. `make restore ENV=local INPUT_DIR=/Users/nick/dev/nudj/local/dbdump`
   1. `INPUT_DIR` must be an absolute path to a db backup directory produced by the backup command above
 
-# Releases
+# Deploys
 
 ## staging or demo
 
-Releases the most recent build image tagged with `latest` for each app to the specified environment. Check CI on the `develop` branches to track the image building progress and double check what you are deploying.
+Deploys the most recent build image tagged with `latest` for each app to the specified environment. Check CI on the `develop` branches to track the image building progress and double check what you are deploying.
 
 1. Ensure you have ssh access to the relevant server (try running `ssh nudj[environment]` in the terminal)
-1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the environment dir you wish to release (ask for them from a colleague)
+1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the environment dir you wish to deploy (ask for them from a colleague)
 1. Ensure the builds on the develop branch for all applications have completed without error on CodeFresh
-1. `make release ENV=[environment]` e.g. `make release ENV=staging`
+1. `make deploy ENV=[environment]` e.g. `make deploy ENV=staging`
 
 ## production
 
@@ -114,18 +114,18 @@ Releases the most recent build image tagged with `latest` for each app to the sp
 **If in any doubt, do not use!!!**
 
 1. Ensure you have ssh access to the production server (try running `ssh nudjproduction` in the terminal)
-1. Release all applications with their own semver versions and ensure the builds have completed and released the appropriately tagged Docker images
+1. Deploy all applications with their own semver versions and ensure the builds have completed and released the appropriately tagged Docker images
 1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the production dir (ask for them from a colleague)
-1. `make release ENV=production SERVER=[server-version] WEB=[web-version] HIRE=[hire-version] ADMIN=[admin-version] API=[api-version]` e.g. `make release ENV=production SERVER=1.0.0 WEB=2.0.0 HIRE=3.0.0 ADMIN=4.0.0 API=5.0.0`
+1. `make deploy ENV=production SERVER=[server-version] WEB=[web-version] HIRE=[hire-version] ADMIN=[admin-version] API=[api-version]` e.g. `make deploy ENV=production SERVER=1.0.0 WEB=2.0.0 HIRE=3.0.0 ADMIN=4.0.0 API=5.0.0`
 1. Enter `nudjtech` password for production (can be found in 1Password) when requested
 
 ### OPTIONAL: File syncs
 
 You can sync the server files from your local environment directory with the `SYNC=true` option.
 
-1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the environment dir you wish to release (ask for them from a colleague)
-1. Run the steps mentioned above appending `SYNC=true` to the `make release` command
-  - `make release ENV=[environment] SYNC=true` e.g. `make release ENV=staging SYNC=true`
+1. Ensure you have all the required `.env` files, `.htpasswd` file and ssl cert files in the environment dir you wish to deploy (ask for them from a colleague)
+1. Run the steps mentioned above appending `SYNC=true` to the `make deploy` command
+  - `make deploy ENV=[environment] SYNC=true` e.g. `make deploy ENV=staging SYNC=true`
 
 # Debugging environments
 
@@ -133,7 +133,7 @@ You can sync the server files from your local environment directory with the `SY
 1. Once inside the container, run `cd [environment]`. e.g. `cd staging`
 1. To get an overview of the docker images' processes, run `sudo docker-compose ps`
 1. Enter `nudjtech` password for the given environment (can be found in 1Password) when prompted
-1. If any of the images have gone down or failed, try attempting a re-release.
+1. If any of the images have gone down or failed, try attempting a re-deploy.
 1. To debug a specific issue with an image, run `sudo docker-compose logs [repo]`
   - e.g. If you got an error on hitting the homepage for `dev.hire.nudj.co`, you might run `sudo docker-compose logs hire` to diagnose the issue.
 1. To diagnose or debug issues further, see: **Full production emulation**
