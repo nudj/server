@@ -2,6 +2,7 @@ version: '2'
 services:
   server:
     image: nudj/server:local
+    restart: always
     volumes:
       - ./ssl:/etc/ssl
       - ./.htpasswd:/etc/nginx/.htpasswd
@@ -14,24 +15,28 @@ services:
       - "443:443"
   web:
     image: nudj/web:local
+    restart: always
     env_file: .env-web
     depends_on:
       - redis
       - api
   hire:
     image: nudj/hire:local
+    restart: always
     env_file: .env-hire
     depends_on:
       - redis
       - api
   admin:
     image: nudj/admin:local
+    restart: always
     env_file: .env-admin
     depends_on:
       - redis
       - api
   api:
     image: nudj/api:local
+    restart: always
     env_file: .env-api
     depends_on:
       - db
@@ -40,10 +45,12 @@ services:
       - "82:82"
   redis:
     image: redis:alpine
+    restart: always
     volumes:
       - ./sessionData:/data
   db:
     image: arangodb:3.1.17
+    restart: always
     env_file: .env-db
     volumes:
       - ./dbdata:/var/lib/arangodb3
