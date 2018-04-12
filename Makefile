@@ -5,7 +5,7 @@ DOCKERCOMPOSE:=docker-compose -p nudj
 CWD=$(shell pwd)
 SYNC ?= false
 
-.PHONY: build up down backup restore release
+.PHONY: build up down backup restore deploy
 
 build:
 	@docker build -t $(IMAGE):development local
@@ -26,8 +26,8 @@ backup:
 restore:
 	@./devops/restore $(ENV) $(INPUT_DIR)
 
-release:
-	@./devops/release $(ENV) $(SYNC) $(SERVER) $(WEB) $(HIRE) $(ADMIN) $(API)
+deploy:
+	@./devops/deploy $(ENV) $(SYNC) $(SERVER) $(WEB) $(HIRE) $(ADMIN) $(API)
 
 migrate:
 	@./devops/migrate $(ENV) $(MIGRATION) $(DIRECTION)
