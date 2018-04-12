@@ -17,7 +17,7 @@ services:
   web-beta:
     image: nudj/maintenance:latest
   web:
-    image: nudj/web:8.2.0
+    image: nudj/web:9.0.0
     env_file: .env-web
     depends_on:
       - redis
@@ -25,13 +25,13 @@ services:
   hire-beta:
     image: nudj/maintenance:latest
   hire:
-    image: nudj/hire:10.0.0
+    image: nudj/hire:10.1.0
     env_file: .env-hire
     depends_on:
       - redis
       - api
   admin:
-    image: nudj/admin:9.1.0
+    image: nudj/admin:9.1.1
     env_file: .env-admin
     depends_on:
       - redis
