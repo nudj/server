@@ -1,7 +1,7 @@
 version: '2'
 services:
   server:
-    image: nudj/server:3.0.0
+    image: nudj/server:3.1.0
     restart: always
     volumes:
       - ./ssl:/etc/ssl
@@ -19,7 +19,7 @@ services:
     image: nudj/maintenance:latest
     restart: always
   web:
-    image: nudj/web:9.0.0
+    image: nudj/web:9.0.1
     restart: always
     env_file: .env-web
     depends_on:
@@ -29,7 +29,7 @@ services:
     image: nudj/maintenance:latest
     restart: always
   hire:
-    image: nudj/hire:10.1.0
+    image: nudj/hire:10.1.1
     restart: always
     env_file: .env-hire
     depends_on:
