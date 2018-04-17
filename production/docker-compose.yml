@@ -29,21 +29,21 @@ services:
     image: nudj/maintenance:latest
     restart: always
   hire:
-    image: nudj/hire:10.1.1
+    image: nudj/hire:10.2.0
     restart: always
     env_file: .env-hire
     depends_on:
       - redis
       - api
   admin:
-    image: nudj/admin:9.1.1
+    image: nudj/admin:9.2.0
     restart: always
     env_file: .env-admin
     depends_on:
       - redis
       - api
   api:
-    image: nudj/api:15.0.0
+    image: nudj/api:15.2.0
     restart: always
     env_file: .env-api
     depends_on:
