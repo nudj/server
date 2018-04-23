@@ -1,0 +1,54 @@
+#!/bin/sh
+
+validEnvironment() {
+  [ "$1" = "local" ] || \
+  [ "$1" = "demo" ] || \
+  [ "$1" = "staging" ] || \
+  [ "$1" = "production" ]
+}
+
+environment=$1
+if [ -z "$1" ]
+then
+  echo "Must supply an environment - e.g. ENV=demo"
+  exit 1
+fi
+
+if ! validEnvironment $environment
+then
+  echo "Must supply a valid environment - local|demo|staging|production"
+  exit 1
+fi
+
+script=$2
+if [ -z "$2" ]
+then
+  echo "Must supply a script name - e.g. SCRIPT=00000-export-role-tags"
+  exit 1
+fi
+
+server="nudj$environment"
+scriptsDir="$PWD/../api/src/scripts"
+
+echo "Executing $script onto $environment"
+
+if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = "production" ]]; then
+  echo "local: Syncing devops scripts to $environment"
+  rsync -az --delete -e "ssh" $PWD/devops/remote/ $server:/home/nudjtech/devops
+
+  echo "local: Syncing execution scripts to $environment"
+  rsync -az --delete -e "ssh" $scriptsDir/ $server:/home/nudjtech/scripts
+
+  echo "local: Executing script on $environment"
+  ssh -t $server /bin/sh -c "'/home/nudjtech/devops/execute $environment $script $direction'"
+  exitCode=$?
+else
+  dockerRun="docker-compose -p nudj -f $PWD/docker-compose.yml -f $PWD/../api/docker-compose.yml run --rm"
+
+  echo "local: Executing script script locally"
+  $PWD/devops/remote/execute "local" "$script" "$direction" "$dockerRun" "$scriptsDir"
+  exitCode=$?
+fi
+
+[[ $exitCode = 0 ]] && result="complete 👍" || result="failed 👎"
+echo "\nlocal: Execution of $script onto $environment $result"

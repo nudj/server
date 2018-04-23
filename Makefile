@@ -31,3 +31,6 @@ deploy:
 
 migrate:
 	@./devops/migrate $(ENV) $(MIGRATION) $(DIRECTION)
+
+execute:
+	@./devops/execute $(ENV) $(SCRIPT)
