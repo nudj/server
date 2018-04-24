@@ -2,8 +2,8 @@
 
 environment=$1
 script=$2
-dockerRun=${4:-'docker-compose run --rm'}
-scriptsDir=${5:-'/home/nudjtech/scripts'}
+dockerRun=${3:-'docker-compose run --rm'}
+scriptsDir=${4:-'/home/nudjtech/scripts'}
 
 cd $environment
 
