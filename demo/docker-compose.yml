@@ -10,19 +10,19 @@ services:
       - "80:80"
       - "443:443"
   web:
-    image: nudj/web:latest
+    image: nudj/web:demo
     restart: always
     env_file: .env-web
   hire:
-    image: nudj/hire:latest
+    image: nudj/hire:demo
     restart: always
     env_file: .env-hire
   admin:
-    image: nudj/admin:latest
+    image: nudj/admin:demo
     restart: always
     env_file: .env-admin
   api:
-    image: nudj/api:latest
+    image: nudj/api:demo
     restart: always
     env_file: .env-api
   redis:
