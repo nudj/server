@@ -1,6 +1,6 @@
 IMAGE:=nudj/server
 IMAGEUI:=nudj/test-ui
-COREAPPS:=server redis db
+COREAPPS:=server redis db sql
 DOCKERCOMPOSE:=docker-compose -p nudj
 CWD=$(shell pwd)
 SYNC ?= false

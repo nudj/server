@@ -1,0 +1,53 @@
+version: '2'
+services:
+  server:
+    image: nudj/server:development
+    restart: always
+    volumes:
+      - ./ssl:/etc/ssl
+      - ./.htpasswd:/etc/nginx/.htpasswd
+    depends_on:
+      - web
+      - web-beta
+      - hire
+      - hire-beta
+      - admin
+    ports:
+      - "80:80"
+      - "443:443"
+  web-beta:
+    image: nudj/maintenance:latest
+    restart: always
+  web:
+    image: nudj/web:latest
+    restart: always
+    env_file: .env-web
+    depends_on:
+      - redis
+      - api
+  hire-beta:
+    image: nudj/maintenance:latest
+    restart: always
+  hire:
+    image: nudj/hire:latest
+    restart: always
+    env_file: .env-hire
+    depends_on:
+      - redis
+      - api
+  admin:
+    image: nudj/admin:latest
+    restart: always
+    env_file: .env-admin
+    depends_on:
+      - redis
+      - api
+  api:
+    image: nudj/api:development
+    restart: always
+    env_file: .env-api
+  redis:
+    image: redis:alpine
+    restart: always
+    volumes:
+      - ../sessionData:/data

@@ -24,6 +24,14 @@ services:
       - ../server/local/dbdata:/var/lib/arangodb3
     ports:
       - "8529:8529"
+  sql:
+    image: mysql:5.7
+    restart: always
+    env_file: ../server/local/.env-sql
+    volumes:
+      - ../server/local/sqldata:/var/lib/mysql
+    ports:
+      - "3306:3306"
   ui:
     image: nudj/test-ui
     restart: always
