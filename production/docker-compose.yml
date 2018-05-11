@@ -19,7 +19,7 @@ services:
     image: nudj/maintenance:latest
     restart: always
   web:
-    image: nudj/web:11.0.0
+    image: nudj/web:11.1.0
     restart: always
     env_file: .env-web
     depends_on:
