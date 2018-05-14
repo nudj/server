@@ -4,8 +4,9 @@ environment=$1
 script=$2
 dockerRun=${3:-'docker-compose run --rm'}
 scriptsDir=${4:-'/home/nudjtech/scripts'}
+arg=$5
 
 cd $environment
 
 echo "$environment: Executing script on api service\n"
-$dockerRun -v $scriptsDir:/usr/src/scripts api /bin/sh -c "node /usr/src/scripts $script"
+$dockerRun -v $scriptsDir:/usr/src/scripts api /bin/sh -c "node /usr/src/scripts $script $arg"
