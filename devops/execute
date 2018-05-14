@@ -27,6 +27,7 @@ then
   exit 1
 fi
 
+arg=$3
 server="nudj$environment"
 scriptsDir="$PWD/../api/src/scripts"
 
@@ -40,13 +41,13 @@ if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = 
   rsync -az --delete -e "ssh" $scriptsDir/ $server:/home/nudjtech/scripts
 
   echo "local: Executing script on $environment"
-  ssh -t $server /bin/sh -c "'/home/nudjtech/devops/execute $environment $script'"
+  ssh -t $server /bin/sh -c "'/home/nudjtech/devops/execute $environment $script $arg'"
   exitCode=$?
 else
   dockerRun="docker-compose -p nudj -f $PWD/docker-compose.yml -f $PWD/../api/docker-compose.yml run --rm"
 
   echo "local: Executing script script locally"
-  $PWD/devops/remote/execute "local" "$script" "$dockerRun" "$scriptsDir"
+  $PWD/devops/remote/execute "local" "$script" "$dockerRun" "$scriptsDir" "$arg"
   exitCode=$?
 fi
 
