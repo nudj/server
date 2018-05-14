@@ -33,4 +33,4 @@ migrate:
 	@./devops/migrate $(ENV) $(MIGRATION) $(DIRECTION)
 
 execute:
-	@./devops/execute $(ENV) $(SCRIPT)
+	@./devops/execute $(ENV) $(SCRIPT) $(ARG)
