@@ -29,6 +29,7 @@ fi
 
 arg=$3
 server="nudj$environment"
+localScriptsDir="$PWD/../api/src/scripts"
 
 echo "Executing $script onto $environment"
 
@@ -37,22 +38,21 @@ if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = 
   rsync -az --delete -e "ssh" $PWD/devops/remote/ $server:/home/nudjtech/devops
 
   echo "local: Syncing execution scripts to $environment"
-  rsync -az --delete -e "ssh" $PWD/../api/src/scripts/ $server:/home/nudjtech/scripts
+  rsync -az --delete -e "ssh" $localScriptsDir/ $server:/home/nudjtech/scripts
 
   echo "local: Executing script on $environment"
 
-  dockerRun="docker-compose run --no-deps --rm"
-  scriptsDir="/home/nudjtech/scripts"
+  remoteDockerCommand="docker-compose run --no-deps --rm"
+  remoteScriptsDir="/home/nudjtech/scripts"
 
-  ssh -t $server /bin/sh -c "'/home/nudjtech/devops/execute $environment $script \"$dockerRun\" $scriptsDir \"$arg\"'"
+  ssh -t $server /bin/sh -c "'/home/nudjtech/devops/execute $environment $script \"$remoteDockerCommand\" $remoteScriptsDir \"$arg\"'"
   exitCode=$?
 else
   echo "local: Executing script script locally"
 
-  scriptsDir="$PWD/../api/src/scripts"
-  dockerRun="docker-compose -p nudj -f $PWD/docker-compose.yml -f $PWD/../api/docker-compose.yml run --rm"
+  localDockerCommand="docker-compose -p nudj -f $PWD/docker-compose.yml -f $PWD/../api/docker-compose.yml run --rm"
 
-  $PWD/devops/remote/execute "local" "$script" "$dockerRun" "$scriptsDir" "$arg"
+  $PWD/devops/remote/execute "local" "$script" "$localDockerCommand" "$localScriptsDir" "$arg"
   exitCode=$?
 fi
 
