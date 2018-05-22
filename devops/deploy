@@ -48,10 +48,18 @@ else
   image="nudj/server:${1}"
 fi
 
-web="nudj/web:${4:-latest}"
-hire="nudj/hire:${5:-latest}"
-admin="nudj/admin:${6:-latest}"
-api="nudj/api:${7:-latest}"
+tag="latest"
+if [[ "$environment" = "development" ]]; then
+  tag="development"
+fi
+if [[ "$environment" = "demo" ]]; then
+  tag="demo"
+fi
+
+web="nudj/web:${4:-$tag}"
+hire="nudj/hire:${5:-$tag}"
+admin="nudj/admin:${6:-$tag}"
+api="nudj/api:${7:-$tag}"
 maintenance="nudj/maintenance:latest"
 server="nudj$environment"
 localPath="$environment"
