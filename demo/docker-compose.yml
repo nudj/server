@@ -6,6 +6,11 @@ services:
     volumes:
       - ./ssl:/etc/ssl
       - ./.htpasswd:/etc/nginx/.htpasswd
+    depends_on:
+      - web
+      - hire
+      - admin
+      - db
     ports:
       - "80:80"
       - "443:443"
@@ -13,18 +18,29 @@ services:
     image: nudj/web:demo
     restart: always
     env_file: .env-web
+    depends_on:
+      - redis
+      - api
   hire:
     image: nudj/hire:demo
     restart: always
     env_file: .env-hire
+    depends_on:
+      - redis
+      - api
   admin:
     image: nudj/admin:demo
     restart: always
     env_file: .env-admin
+    depends_on:
+      - redis
+      - api
   api:
     image: nudj/api:demo
     restart: always
     env_file: .env-api
+    depends_on:
+      - db
   redis:
     image: redis:alpine
     restart: always
