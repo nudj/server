@@ -19,7 +19,7 @@ services:
     image: nudj/maintenance:latest
     restart: always
   web:
-    image: nudj/web:12.1.0
+    image: nudj/web:13.0.0
     restart: always
     env_file: .env-web
     depends_on:
@@ -43,7 +43,7 @@ services:
       - redis
       - api
   api:
-    image: nudj/api:20.2.0
+    image: nudj/api:20.3.0
     restart: always
     env_file: .env-api
     depends_on:
