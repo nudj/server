@@ -45,14 +45,14 @@ if [[ "$environment" = "demo" || "$environment" = "staging" || "$environment" = 
   remoteDockerCommand="docker-compose run --no-deps --rm"
   remoteScriptsDir="/home/nudjtech/scripts"
 
-  ssh -t $server /bin/sh -c "'/home/nudjtech/devops/execute $environment $script \"$remoteDockerCommand\" $remoteScriptsDir \"$arg\"'"
+  ssh -t $server /bin/sh -c "'/home/nudjtech/devops/execute $environment $script \"$remoteDockerCommand\" $remoteScriptsDir \"this\" \"$arg\"'"
   exitCode=$?
 else
   echo "local: Executing script script locally"
 
   localDockerCommand="docker-compose -p nudj -f $PWD/docker-compose.yml -f $PWD/../api/docker-compose.yml run --rm"
 
-  $PWD/devops/remote/execute "local" "$script" "$localDockerCommand" "$localScriptsDir" "$arg"
+  $PWD/devops/remote/execute "local" "$script" "$localDockerCommand" "$localScriptsDir" "this" "$arg"
   exitCode=$?
 fi
 
