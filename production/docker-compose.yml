@@ -54,7 +54,7 @@ services:
     volumes:
       - ../sessionData:/data
   db:
-    image: arangodb
+    image: arangodb:3.1.17
     restart: always
     env_file: .env-db
     volumes:
