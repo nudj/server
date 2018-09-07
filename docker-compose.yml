@@ -32,6 +32,14 @@ services:
       - ../server/local/sqldata:/var/lib/mysql
     ports:
       - "3306:3306"
+  nosql:
+    image: amazon/dynamodb-local:1.11.119
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../server/local/nosqldata:/home/dynamodblocal/data
+    command: -jar DynamoDBLocal.jar -dbPath /home/dynamodblocal/data
   ui:
     image: nudj/test-ui
     restart: always
