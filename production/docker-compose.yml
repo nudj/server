@@ -43,7 +43,7 @@ services:
       - redis
       - api
   api:
-    image: nudj/api:23.10.0
+    image: nudj/api:23.11.0
     restart: always
     env_file: .env-api
     depends_on:
