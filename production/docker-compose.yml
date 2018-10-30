@@ -29,7 +29,7 @@ services:
     image: nudj/maintenance:latest
     restart: always
   hire:
-    image: nudj/hire:18.3.0
+    image: nudj/hire:18.3.1
     restart: always
     env_file: .env-hire
     depends_on:
