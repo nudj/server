@@ -15,20 +15,20 @@ services:
     ports:
       - "80:80"
       - "443:443"
-  web-beta:
+  web:
     image: nudj/maintenance:latest
     restart: always
-  web:
+  web-beta:
     image: nudj/web:latest
     restart: always
     env_file: .env-web
     depends_on:
       - redis
       - api
-  hire-beta:
+  hire:
     image: nudj/maintenance:latest
     restart: always
-  hire:
+  hire-beta:
     image: nudj/hire:latest
     restart: always
     env_file: .env-hire
